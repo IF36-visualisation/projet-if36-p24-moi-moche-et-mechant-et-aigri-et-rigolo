@@ -2,6 +2,7 @@
 # Introduction
 
 ## Données
+Les données viennent du site kaggle, nous les avons choisis car on voulait travailler sur un jeu-vidéo que nous aimons. Nous les avons également choisi car on a trouvé plusieurs dataset complémentaires et riche. Elles s'intègrent dans le contexte de l'esport et plus particulièrement dans le jeu-vidéo Overwatch
 Nous avons 4 dataset différents donc nous allons faire 4 parties afin que ce soit plus clair.
 ### Overwatch 2 statistics
 ### Overwatch
