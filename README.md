@@ -28,6 +28,68 @@ Les quatres suivantes correspondent aux mêmes données mais pour chaque saison.
 
 ### Overwatch
 ### eSports Earnings
+
+Les données du dataset proviennent du site eSportsEarning.com , ce dataset comporte 3 parties distinctes :
+
+1. country-and-continent-codes-list.csv
+**Nombre d’observations** (lignes) : 262  
+**Nombre de variables** (colonnes) : 6  
+Détails des variables :
+
+| Nom de variable           | Définition de variable    | Type de variable                                |
+|---------------------------|---------------------------|-------------------------------------------------|
+| Continent_Name            | Nom du continent          | type texte, 7 valeurs uniques, ex. Asia, Europe |
+| Continent_Code            | Code du continent         | type texte, 6 valeurs uniques, ex. AS, EU       |
+| Country_Name              | Nom complet du pays       | type texte, 254 valeurs uniques                 |
+| Two_Letter_Country_Code   | Code pays à deux lettres  | type texte, 253 valeurs uniques                 |
+| Three_Letter_Country_Code | Code pays à trois lettres | type texte, 250 valeurs uniques                 |
+| Country_Number            | Numéro du pays            | type numérique, 250 valeurs uniques             |
+
+Les données peuvent être regroupées par continent (Continent_Name et Continent_Code), offrant une catégorisation géographique des pays (Country_Name, Two_Letter_Country_Code, Three_Letter_Country_Code).
+Ce fichier semble principalement fournir une correspondance entre les pays et leur appartenance continentale, sans sous-groupes internes évidents au-delà de cette classification géographique.
+
+
+2. highest_earning_players.csv
+
+**Nombre d’observations**: 96  
+**Nombre de variables** : 8  
+Détails des variables :
+
+| Nom de variable           | Définition de variable    | Type de variable                                |
+|---------------------------|---------------------------|-------------------------------------------------|
+| PlayerId            | Identifiant du joueur          | type numérique, 998 valeurs uniques |
+| NameFirst            | Prénom du joueur         | type texte, 756 valeurs uniques       |
+| NameLast              | Nom de famille du joueur      | type texte, 637 valeurs uniques                 |
+| CurrentHandle   | Pseudo actuel du joueur  | type texte, 990 valeurs uniques                 |
+| CountryCode | Code pays du joueur | type texte, 56 valeurs uniques                 |
+| TotalUSDPrize            | Total des gains en USD            | type numérique             |
+| Game | Jeu | type texte, 10 genres de jeu différents                 |
+| Genre            | Genre du jeu            | type texte, 5 genres différents             |
+
+Les données sont organisées autour des joueurs et leurs gains dans différents jeux vidéo.
+Catégories Principales : Les joueurs peuvent être catégorisés par le jeu (Game) auquel ils participent, et par genre de jeu (Genre), comme les jeux de tir à la première personne ou les arènes de bataille en ligne multijoueur.
+Sous-groupes Possibles : Au sein de chaque jeu ou genre, des analyses peuvent être effectuées sur des sous-groupes, tels que les joueurs par pays (CountryCode), ou les tranches de gains (TotalUSDPrize).
+
+
+3. highest_earning_teams.csv
+
+**Nombre d’observations** : 87  
+**Nombre de variables** : 6  
+Détails des variables :
+
+| Nom de variable           | Définition de variable    | Type de variable                                |
+|---------------------------|---------------------------|-------------------------------------------------|
+| TeamId            | Identifiant de l'équipe          | type numérique, 505 valeurs uniques |
+| TeamName            | Nom de l'équipe         | type texte, 505 valeurs uniques       |
+| TotalUSDPrize              | Total des gains en USD      | type numérique                |
+| TotalTournaments   | Total des tournois disputés  | type numérique                |
+| Game | Jeu | type texte, 10 genres de jeu différents                 |
+| Genre            | Genre du jeu            | type texte, 5 genres différents             |
+
+Semblable aux données des joueurs, celles-ci sont organisées autour des équipes et de leurs performances financières dans le domaine des esports.
+Catégories Principales : Les équipes peuvent être catégorisées par jeu (Game) et par genre de jeu (Genre), offrant un aperçu des domaines où elles ont le plus de succès.
+Sous-groupes Possibles : Il pourrait y avoir des analyses sur le nombre de tournois disputés (TotalTournaments) par rapport aux gains totaux, ou des comparaisons entre les genres de jeux pour voir où les équipes réussissent le plus.
+
 ### Professional Overwatch Player Mouse/Sens. Settings
 
 ## Plan d'analyse
@@ -57,4 +119,22 @@ Dans l'ensemble, toutes ces questions peuvent être découpées :
 - En fonction des différentes saisons  
 Permettant d'étudier sous différents angles toutes nos données. 
 
+### eSports Earnings
 
+Voici quelques exemples d'interrogations sur ce dataset : 
+
+**- Moyenne des gains des joueurs en fonction de leur nationalité ?** 
+
+Cette analyse vise à déterminer si certaines nationalités sont plus susceptibles de gagner des sommes d'argent plus élevées dans le monde d'Overwatch 2. Cela pourrait révéler des tendances intéressantes, comme la possibilité que certaines régions offrent un meilleur soutien, formation, ou plus d'opportunités pour leurs joueurs. Les résultats pourraient indiquer des écarts de performance ou de popularité du jeu selon les pays.
+
+**- Moyenne des gains des joueurs par continent ?**
+
+Semblable à l'analyse par nationalité, mais à une échelle plus large, cette question cherche à comparer les gains moyens sur différents continents. Cela peut aider à comprendre comment les infrastructures régionales, la popularité du jeu, et le niveau de compétition influencent les récompenses financières. Cela pourrait également révéler des continents où le jeu est plus compétitif ou plus prisé.
+
+**- Moyenne de gains des équipes par tournoi ?**
+
+Cette analyse vise à évaluer le succès financier des équipes à travers différents tournois. Cela peut révéler quelles équipes dominent la scène d'Overwatch 2 et comment la distribution des prix varie entre les tournois. Cela peut également aider à identifier des tournois particulièrement lucratifs ou compétitifs.
+
+**- Nationalités des joueurs les mieux payés ?**
+
+En identifiant les nationalités des joueurs les mieux rémunérés, on peut tenter de déduire non seulement où se trouvent les talents les plus prometteurs ou les plus accomplis, mais aussi où le jeu est le plus valorisé. Cette information peut indiquer des tendances de recrutement pour les futures équipes ou des zones cibles pour le développement des ligues et des tournois.
