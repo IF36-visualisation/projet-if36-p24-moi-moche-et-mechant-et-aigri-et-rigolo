@@ -90,7 +90,26 @@ Semblable aux données des joueurs, celles-ci sont organisées autour des équip
 Catégories Principales : Les équipes peuvent être catégorisées par jeu (Game) et par genre de jeu (Genre), offrant un aperçu des domaines où elles ont le plus de succès.
 Sous-groupes Possibles : Il pourrait y avoir des analyses sur le nombre de tournois disputés (TotalTournaments) par rapport aux gains totaux, ou des comparaisons entre les genres de jeux pour voir où les équipes réussissent le plus.
 
+### Overwatch Heroes
+
+Overwatch_edopic.csv est un dataset décrivant tous les héros présents dans le jeu ainsi que leurs statistiques. 
+
+Ce fichier est composé de 8 variables et de 58 observations. A savoir qu’il n’y a pas 58 héros dans le jeu, mais quelques-uns possèdent plusieurs formes qui ont des statistiques différentes. Le jeu de données ayant été publié il y a 7ans, les héros qui sont arrivés depuis n’y figurent pas, il faudra donc prendre des pincettes quand aux résultats obtenus puisqu’un total de 12 personnages ne sont pas présents dans ce dataset, et auraient pu changer les résultats.
+
+Description des variables : 
+-	Heroes : Nom des héros présents dans le jeu (type texte) 
+-	Damage par seconds : Nombre de dégâts infligés par seconde (type numérique) 
+-	Headshot DPS : Nombre de dégâts infligés par seconde lorsque tous les tirs touchent à la tête (type numérique, certaines observations sont vides car plusieurs héros ne peuvent pas mettre de « Headshot »)
+-	Single shot : Nombre de dégâts causés par coup/balle (type numérique)
+-	Nanoboost DPS : Nombre de dégâts infligés lorsque le personnage voit ses dégâts augmentés par le Nanoboost de Ana (sa capacité ultime) (type numérique)
+-	Health per Sec : Nombre de soins prodigués par secondes (type numérique, 12 valeurs uniques) 
+-	Life : Nombre de points de vie (type numérique)
+-	Reload : Nombre de balles par chargeur (type numérique)
+
+
+
 ### Professional Overwatch Player Mouse/Sens. Settings
+
 
 ## Plan d'analyse
 
@@ -138,3 +157,26 @@ Cette analyse vise à évaluer le succès financier des équipes à travers diff
 **- Nationalités des joueurs les mieux payés ?**
 
 En identifiant les nationalités des joueurs les mieux rémunérés, on peut tenter de déduire non seulement où se trouvent les talents les plus prometteurs ou les plus accomplis, mais aussi où le jeu est le plus valorisé. Cette information peut indiquer des tendances de recrutement pour les futures équipes ou des zones cibles pour le développement des ligues et des tournois.
+
+### Overwatch Heroes
+
+Voici quelques exemples d'interrogations sur ce dataset : 
+
+<b> - Quel héros fait le plus de dégâts ?
+
+Nous pouvons penser que ce sera un DPS puisque leur rôle dans une partie est de faire un maximum de kills et de dégâts. Sachant que Bastion possède une capacité qui lui permet de se transformer en tourelle et tirer avec une énorme cadence, nous pouvons nous attendre que ce soit lui qui sorte en tête du classement. 
+Pour répondre à cette question nous n’aurons qu’à utiliser la variable « Damage per sec » . 
+Afin de donner plus de sens à cette question, nous pourrions élire le personnage qui fait le plus de dégâts par rôle (Tank, DPS, Healer). Pour cela, il faudrait avoir le rôle de chaque personnage pour pouvoir les trier selon leur rôle, mais cette variable n’est pas présente dans le dataset, nous devrons donc la rajouter nous-même.
+
+<b> - Quel héros fait le plus de dégâts ?
+
+Nous pouvons penser que ce serait un Tank car ces derniers sont ceux qui sont sensés pouvoir encaisser le plus de dégâts, ceux qui sont en ligne de front. Nous pensons donc à Reinhardt. 
+Pour répondre à cette question, nous aurons à utiliser la variable « life ».
+Afin de donner plus de sens à cette question, nous pourrions élire le personnage qui a le plus de vie par rôle (Tank, DPS, Healer). Pour cela, il faudrait avoir le rôle de chaque personnage pour pouvoir les trier selon leur rôle, mais cette variable n’est pas présente dans le dataset, nous devrons donc la rajouter nous-même. 
+
+<b> - Quel est le héros avec le plus de soins par seconde ?
+
+Cette question est importante car elle nous permettrait de savoir quel personnage a le plus de potentiel de soin pour son équipe. Nous nous attendons donc logiquement à ce que ce soit un healer. Nous pouvons penser que le personnage que nous cherchons soit Ange, car celle-ci délivre un flux de soin continu. 
+Pour répondre à cette question, nous utiliserons la variable « Health per Sec ». 
+Le seul problème que nous pourrions rencontrer serait que dans ce dataset se trouvent tous les personnages, ainsi que les formes alternatives qu’ils peuvent prendre selon leurs pouvoir ou leur capacité ultime. Il faudra donc départager les personnages, des personnages sous capacité pour avoir un résultat juste.
+
