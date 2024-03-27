@@ -92,7 +92,7 @@ Sous-groupes Possibles : Il pourrait y avoir des analyses sur le nombre de tourn
 
 ## Overwatch Heroes
 
-Overwatch_edopic.csv est un dataset décrivant tous les héros présents dans le jeu ainsi que leurs statistiques. 
+Overwatch_edopic.csv est un dataset décrivant tous les héros présents dans le jeu ainsi que leurs statistiques. C'est un dataset que nous avons trouvé sur le site kaggle. Les personnes ayant publié ce dernier n'ont pas précisé la provenance des données.
 
 Ce fichier est composé de 8 variables et de 58 observations. A savoir qu’il n’y a pas 58 héros dans le jeu, mais quelques-uns possèdent plusieurs formes qui ont des statistiques différentes. Le jeu de données ayant été publié il y a 7ans, les héros qui sont arrivés depuis n’y figurent pas, il faudra donc prendre des pincettes quand aux résultats obtenus puisqu’un total de 12 personnages ne sont pas présents dans ce dataset, et auraient pu changer les résultats.
 
