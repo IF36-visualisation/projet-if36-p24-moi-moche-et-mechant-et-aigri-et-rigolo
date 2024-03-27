@@ -1,11 +1,11 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/Fj4cXJY4)
 # Introduction
 
-## Données
+# Données
 Les données viennent du site kaggle, nous les avons choisis car on voulait travailler sur un jeu-vidéo que nous aimons. Nous les avons également choisi car on a trouvé plusieurs dataset complémentaires et riche. Elles s'intègrent dans le contexte de l'esport et plus particulièrement dans le jeu-vidéo Overwatch
 
 Nous avons 4 dataset différents donc nous allons faire 4 parties afin que ce soit plus clair.
-### Overwatch 2 statistics
+## Overwatch 2 statistics
 
 Ce dataset présente des statistiques sur les héros Overwatch (pick rate, pourcentage de victoires, dégats, etc...) en fonction du niveau du joueur (de bronze à diamand) et des saisons.
 
@@ -26,8 +26,8 @@ Ce dataset est divisé en 5 parties :
 Une première reprend les infos ci-dessus en général depuis que le jeu est sorti.
 Les quatres suivantes correspondent aux mêmes données mais pour chaque saison.
 
-### Overwatch
-### eSports Earnings
+
+## eSports Earnings
 
 Les données du dataset proviennent du site eSportsEarning.com , ce dataset comporte 3 parties distinctes :
 
@@ -90,7 +90,7 @@ Semblable aux données des joueurs, celles-ci sont organisées autour des équip
 Catégories Principales : Les équipes peuvent être catégorisées par jeu (Game) et par genre de jeu (Genre), offrant un aperçu des domaines où elles ont le plus de succès.
 Sous-groupes Possibles : Il pourrait y avoir des analyses sur le nombre de tournois disputés (TotalTournaments) par rapport aux gains totaux, ou des comparaisons entre les genres de jeux pour voir où les équipes réussissent le plus.
 
-### Overwatch Heroes
+## Overwatch Heroes
 
 Overwatch_edopic.csv est un dataset décrivant tous les héros présents dans le jeu ainsi que leurs statistiques. 
 
@@ -108,12 +108,45 @@ Description des variables :
 
 
 
-### Professional Overwatch Player Mouse/Sens. Settings
+## Professional Overwatch Player Mouse/Sens. Settings
+
+Ce dataset vient de 3 autres datasets qu’une personne à réuni pour son plaisir. Il présente des statistiques à propos des joueurs professionnels d’Overwatch et de leur sensibilité. Principalement la DPI, le modèle de souris ou encore la sensibilité dans le jeu.  
+Dans ce premier dataset nous avons 3 fichiers différents, le premier contient 99 observations 6 variables :   
+- Model : modèle de la souris (type texte, 99 valeurs uniques, ex.  Logitech G Pro, Raze Viper)
+- Size : taille de la souris (type caractère, 5 valeurs uniques, ex. XS, M, L)
+- Length : longueur de la souris en cm (type numérique)
+- GripWidth : la taille de la zone où les utilisateurs vont tenir la souris, en centimètres (type numérique)
+- Weight : poids la souris en gramme (type numérique)
+- WeightToSizeRatio : ratio entre le poids de souris et la longueur fois la taille de la zone ou on tient la souris (type numérique)  
+
+Le deuxième fichier contient 173 observations et 7 variables :  
+- ID : pseudo du joueur (type texte, 173 valeurs uniques)
+- Team : nom de l’équipe professionnel du joueur (type texte)
+- Status : statut actif ou non (type texte, 1 valeur unique)
+- Roles : rôle du joueur (type texte, 3 valeurs uniques, ex. Support, Tank)
+- HaveSettings : indique si les paramètres du joueurs sont présents dans le fichier suivant (type booléen, 2 valeurs uniques)
+- Hero : le héro principal joué par le joueur (type texte, 23 uniques valeurs)
+- TwitchStream : lien vers le twitch du joueur (type texte)  
+
+Le troisième fichier contient 148 observations et 12 colonnes :   
+- Player : pseudo du joueur (type texte, 148 valeurs uniques)
+- IsProfessional : vrai si leur ID est présent dans le fichier précédent (type booléen)
+- Role : rôle du joueur (type texte, 3 valeurs uniques, ex. Tank, Support, Damage)
+- Hero : le héro principal joué par le joueur (type texte)
+- MouseModel : modèle de la souris (type texte)
+- MouseWeight : poids de la souris (type numérique)
+- MouseWeightToSizeRatio : ratio entre le poids de souris et la longueur fois la taille de la zone ou on tient la souris (type numérique)
+- DPI : dpi des joueurs (type numérique)
+- Sensitivity : sensibilité en jeu (type numérique)
+- eDPI : la dpi multiplié par la sensibilité (type numérique)
+- cmPer360 : nombre de centimètre d’un mouvement horizontal de la souris pour faire un tour complet dans le jeu (type numérique)
+- TwitchStream : lien vers le twitch du joueur (type texte)
 
 
-## Plan d'analyse
 
-### Overwatch 2 statistics
+# Plan d'analyse
+
+## Overwatch 2 statistics
 
 Voici quelques exemple d'interrogations sur ce dataset : 
 
@@ -138,7 +171,7 @@ Dans l'ensemble, toutes ces questions peuvent être découpées :
 - En fonction des différentes saisons  
 Permettant d'étudier sous différents angles toutes nos données. 
 
-### eSports Earnings
+## eSports Earnings
 
 Voici quelques exemples d'interrogations sur ce dataset : 
 
@@ -158,7 +191,7 @@ Cette analyse vise à évaluer le succès financier des équipes à travers diff
 
 En identifiant les nationalités des joueurs les mieux rémunérés, on peut tenter de déduire non seulement où se trouvent les talents les plus prometteurs ou les plus accomplis, mais aussi où le jeu est le plus valorisé. Cette information peut indiquer des tendances de recrutement pour les futures équipes ou des zones cibles pour le développement des ligues et des tournois.
 
-### Overwatch Heroes
+## Overwatch Heroes
 
 Voici quelques exemples d'interrogations sur ce dataset : 
 
@@ -180,3 +213,4 @@ Cette question est importante car elle nous permettrait de savoir quel personnag
 Pour répondre à cette question, nous utiliserons la variable « Health per Sec ». 
 Le seul problème que nous pourrions rencontrer serait que dans ce dataset se trouvent tous les personnages, ainsi que les formes alternatives qu’ils peuvent prendre selon leurs pouvoir ou leur capacité ultime. Il faudra donc départager les personnages, des personnages sous capacité pour avoir un résultat juste.
 
+## Professional Overwatch Player Mouse/Sens. Settings
