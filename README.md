@@ -195,22 +195,43 @@ En identifiant les nationalités des joueurs les mieux rémunérés, on peut ten
 
 Voici quelques exemples d'interrogations sur ce dataset : 
 
-<b> - Quel héros fait le plus de dégâts ?
+**- Quel héros fait le plus de dégâts ?**
 
 Nous pouvons penser que ce sera un DPS puisque leur rôle dans une partie est de faire un maximum de kills et de dégâts. Sachant que Bastion possède une capacité qui lui permet de se transformer en tourelle et tirer avec une énorme cadence, nous pouvons nous attendre que ce soit lui qui sorte en tête du classement. 
 Pour répondre à cette question nous n’aurons qu’à utiliser la variable « Damage per sec » . 
 Afin de donner plus de sens à cette question, nous pourrions élire le personnage qui fait le plus de dégâts par rôle (Tank, DPS, Healer). Pour cela, il faudrait avoir le rôle de chaque personnage pour pouvoir les trier selon leur rôle, mais cette variable n’est pas présente dans le dataset, nous devrons donc la rajouter nous-même.
 
-<b> - Quel héros fait le plus de dégâts ?
+**- Quel héros fait le plus de dégâts ?**
 
 Nous pouvons penser que ce serait un Tank car ces derniers sont ceux qui sont sensés pouvoir encaisser le plus de dégâts, ceux qui sont en ligne de front. Nous pensons donc à Reinhardt. 
 Pour répondre à cette question, nous aurons à utiliser la variable « life ».
 Afin de donner plus de sens à cette question, nous pourrions élire le personnage qui a le plus de vie par rôle (Tank, DPS, Healer). Pour cela, il faudrait avoir le rôle de chaque personnage pour pouvoir les trier selon leur rôle, mais cette variable n’est pas présente dans le dataset, nous devrons donc la rajouter nous-même. 
 
-<b> - Quel est le héros avec le plus de soins par seconde ?
+**- Quel est le héros avec le plus de soins par seconde ?**
 
 Cette question est importante car elle nous permettrait de savoir quel personnage a le plus de potentiel de soin pour son équipe. Nous nous attendons donc logiquement à ce que ce soit un healer. Nous pouvons penser que le personnage que nous cherchons soit Ange, car celle-ci délivre un flux de soin continu. 
 Pour répondre à cette question, nous utiliserons la variable « Health per Sec ». 
 Le seul problème que nous pourrions rencontrer serait que dans ce dataset se trouvent tous les personnages, ainsi que les formes alternatives qu’ils peuvent prendre selon leurs pouvoir ou leur capacité ultime. Il faudra donc départager les personnages, des personnages sous capacité pour avoir un résultat juste.
 
 ## Professional Overwatch Player Mouse/Sens. Settings
+
+Voici quelques exemples d'interrogations sur ce dataset : 
+
+**- Est-ce que les joueurs qui jouent le même rôle ont des sensibilités similaires ?**
+
+Nous pensons que oui car chaque rôle a tendance à jouer de la même façon donc les sensibilité des joueurs devraient se ressembler.
+Pour cette interrogation nous utiliserons les variables Rôle, DPI et Sensitivity.
+Le problème que nous pourrions rencontrer c’est que des joueurs peuvent avoir une DPI élevé et une sensibilité en jeu basse et certains peuvent avoir l’inverse, mais ces deux paramètres peuvent “renvoyer” une sensibilité similaire dans le jeu.
+
+**- Est ce que les joueurs du rôle damage ont une plus grosse sensibilité afin de pouvoir mettre des flickshot ?**
+
+Nous pensons que oui car la plupart des héros de type damage sont au cœur du combat et ont besoin de réagir très vite.
+Pour cette question nous utiliserons les variables Rôle, DPI et Sensitivity.
+Le problème que nous pourrions rencontrer est le même que celui de l’interrogation précédente.
+
+**- Est ce que les joueurs damage privilégient les souris plus légères contrairement aux autres rôles ?**
+
+Dans un premier temps nous aurions eu tendance à penser que oui mais finalement nous ne sommes pas sûrs que le rôle du joueur impact à ce point le poids de la souris. Nous avons donc envie de savoir ce qu’il en est.
+Pour cette interrogation nous utiliserons Rôle et MouseWeight.
+Il n’y a pas de problème particulier à part qu’il n’y ait aucune relation entre le rôle et le poids de la souris et donc que nous puissions rien en tirer.
+
