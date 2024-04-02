@@ -7,6 +7,7 @@ Les données viennent du site kaggle, nous les avons choisis car on voulait trav
 Nous avons 4 dataset différents donc nous allons faire 4 parties afin que ce soit plus clair.
 ## Overwatch 2 statistics
 
+Les données ont été ajoutées par Mykhailo Kachan, qui les a pris du site Overbuff
 Ce dataset présente des statistiques sur les héros Overwatch (pick rate, pourcentage de victoires, dégats, etc...) en fonction du niveau du joueur (de bronze à diamand) et des saisons.
 
 Le dataset se compose de 131 variables et 288 observations ; les colonnes les plus précises ne seront pas étudiées car leur contenu trop pointu ne nous intéresse pas.
