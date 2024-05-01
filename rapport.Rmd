@@ -234,3 +234,11 @@ Le problème que nous pourrions rencontrer est le même que celui de l’interro
 Dans un premier temps nous aurions eu tendance à penser que oui mais finalement nous ne sommes pas sûrs que le rôle du joueur impact à ce point le poids de la souris. Nous avons donc envie de savoir ce qu’il en est.
 Pour cette interrogation nous utiliserons Rôle et MouseWeight.
 Il n’y a pas de problème particulier à part qu’il n’y ait aucune relation entre le rôle et le poids de la souris et donc que nous puissions rien en tirer.
+
+
+# Analyse du dataset 
+
+## 1) 1ère question
+## 2) 2ème question
+## 3) 3ème question
+## 4) 4ème question
