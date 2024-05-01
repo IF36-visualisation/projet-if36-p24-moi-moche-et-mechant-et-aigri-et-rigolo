@@ -264,5 +264,5 @@ ggplot(player_data, aes(x = Role, y = sensibilite_standardisee, fill = Role)) +
   labs(title = "Distribution des sensibilités par rôle",
        x = "Rôle", y = "Sensibilités") +
   theme_minimal()
-
+```
 ## 4) 4ème question
