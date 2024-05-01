@@ -240,5 +240,29 @@ Il n’y a pas de problème particulier à part qu’il n’y ait aucune relatio
 
 ## 1) 1ère question
 ## 2) 2ème question
-## 3) 3ème question
+## 3) Est ce que les joueurs qui joue le même roles on des sensibilité similaire ?
+blablabla
+```{r}
+library(dplyr)
+library(ggplot2)
+
+dpi_reference <- 800
+
+str(player_data)
+player_data$Sensitivity <- as.numeric(player_data$Sensitivity)
+player_data$DPI <- as.numeric(player_data$DPI)
+
+player_data <- player_data %>% 
+  mutate(ratio_sensibilite = Sensitivity / DPI,
+         sensibilite_standardisee = ratio_sensibilite * dpi_reference)
+
+damage_data <- player_data %>% filter(Role == "Damage")
+tank_data <- player_data %>% filter(Role == "Tank")
+support_data <- player_data %>% filter(Role == "Support")
+ggplot(player_data, aes(x = Role, y = sensibilite_standardisee, fill = Role)) +
+  geom_violin() +
+  labs(title = "Distribution des sensibilités par rôle",
+       x = "Rôle", y = "Sensibilités") +
+  theme_minimal()
+
 ## 4) 4ème question
