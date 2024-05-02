@@ -190,11 +190,50 @@ library(readr)
 ```{r}
 #Importation des données
 player_data <- read_csv("./data/player_settings.csv")
+data <- read_csv("./data/ow2_quickplay_heroes_stats__2023-05-06.csv")
 ```
 
 ## 1) 1ère question
 
-## 2) 2ème question
+## 2) Quel rôle de héros provoque le plus de dégâts en jeu ?
+
+Pour répondre à cette question, nous nous appuierons sur le nombre de dégâts infligés par les joueurs en 10 minutes, en fonction du rôle de leur héros. 
+On s'attend ici à trouver le rôle Damage en première place ; c'est en effet son but principal de provoquer des dégâts.
+Au contraire, les dégâts des héros Support devraient être bien inférieurs aux autres, leur but étant de rester à l'arrière du combat, principalement pour soigner leurs coéquipier. 
+
+Nous utiliserons un diagramme simple en colonne, pour représenter la moyenne des dégâts infligés en 10 min pour chaque rôle
+
+```{r}
+
+# Calcul de la moyenne des dégâts pour chaque catégorie de héros
+AverageDamage <- data %>%
+  group_by(Role) %>%
+  summarize(AverageDamage = mean(Damage...10min))
+
+# Graphique
+ggplot(AverageDamage, aes(x = reorder(Role, -AverageDamage), y = AverageDamage, fill = Role)) +
+  geom_col(width = 0.7, color = NA, position = "dodge",  fill = c("#199ace", "#4dd3f1", "#1632b0")) + 
+  labs(title = "Moyenne des dégâts par catégorie de héros", # Titres
+       x = "Catégorie de héros",
+       y = "Moyenne des dégâts (10min)") +
+  theme_minimal() + # Thème minimal
+  theme(legend.position = "none",
+        panel.grid.major = element_blank(), # Pas de lignes de grille majeures
+        axis.line = element_line(color = "black"), # Couleur de la ligne d'axe
+        axis.text = element_text(size = 12, color = "black"), # Taille et couleur du texte de l'axe
+        axis.title = element_text(size = 14, color = "black"), # Taille et couleur du titre de l'axe
+        plot.title = element_text(size = 16, hjust = 0.5, color = "black")) + # Taille et couleur du titre du graphique
+  geom_text(aes(label = round(AverageDamage)), vjust = -0.3, size = 3.5, color = "black", fontface = "bold") 
+
+``` 
+
+Plusieurs observations peuvent être faites grâce à ce graphique : 
+
+Tout d'abord, les héros de type support ont en effet une moyenne de dégâts bien moins élevées que celle des autres rôles. C'est un résultat qui est attendu et sans surprise. 
+
+Par contre, contrairement à nos hypothèses, on peut remarquer le rôle Damage ne se démarque pas du rôle Tank. C'est même ce dernier qui à la moyenne la plus haute. Ce résultat peut paraître étonnant si on regarde les résultats de la question précédente ; en effet, au niveau des dégâts par seconde, les héros de type Damage sont les plus puissants.
+
+Mais la question précédente prend en compte seulement les statistiques théoriques des héros. Dans le cas de ce diagramme, les données sont des statistiques réelles, prises en jeu. Alors même si les héros de rôle Damage sont plus puissant en théorie, les type Tank sont toujours au front. Ils ont plus de vie, et donc plus de temps pour mettre des dégâts aux autres joueurs avant de mourir, même si leurs attaques sont moins puissantes. Ceci explique donc l'équilibre entre les dégâts des Tank et des Damage sur 10 minutes de jeu. 
 
 ## 3) Est ce que les joueurs qui joue le même roles on des sensibilité similaire ?
 
