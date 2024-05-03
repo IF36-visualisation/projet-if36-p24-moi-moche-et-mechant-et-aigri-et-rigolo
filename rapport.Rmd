@@ -191,6 +191,8 @@ library(readr)
 #Importation des données
 player_data <- read_csv("./data/player_settings.csv")
 data <- read_csv("./data/ow2_quickplay_heroes_stats__2023-05-06.csv")
+players <- read_csv("./data/highest_earning_players.csv")
+country_codes <- read_csv("./data/country-and-continent-codes-list.csv")
 ```
 
 ## 1) 1ère question
@@ -260,4 +262,35 @@ ggplot(player_data, aes(x = Role, y = sensibilite_standardisee, fill = Role)) +
   theme_minimal()
 ```
 
-## 4) 4ème question
+## 4) Moyenne des gains des joueurs en fonction de leur nationalité ?
+
+overwatch_players <- players[players$Game == "Overwatch", ]
+players$CountryCode <- tolower(overwatch_players$CountryCode)
+country_codes$Country_Name <- sub(",.*", "", country_codes$Country_Name)
+
+head(country_codes$Country_Name)
+country_codes$Two_Letter_Country_Code <- tolower(country_codes$Two_Letter_Country_Code)
+
+merged_data <- merge(players, country_codes, by.x = "CountryCode", by.y = "Two_Letter_Country_Code", all.x = TRUE)
+
+average_earnings <- aggregate(TotalUSDPrize ~ Country_Name, data = merged_data, FUN = mean, na.rm = TRUE)
+average_earnings <- average_earnings[order(-average_earnings$TotalUSDPrize),]
+
+
+barplot(average_earnings$TotalUSDPrize / 1000,
+        names.arg = average_earnings$Country_Name,
+        las = 1,
+        main = "Moyenne des Gains par Nationalité des Joueurs d'Overwatch",
+        xlab = "Gains Moyens (en milliers de USD)",
+        col = "blue",
+        horiz = TRUE,
+        space = 0.8,
+        xlim = c(0, max(average_earnings$TotalUSDPrize / 1000) + 100),
+        ylim = c(0, 25),
+        cex.names = 1)
+
+##   observations
+Le graphique montre des disparités significatives dans les gains moyens des joueurs d'Overwatch selon leur nationalité.
+ Les joueurs américains dominent en termes de revenus, reflétant probablement une industrie du jeu vidéo plus robuste et de meilleures opportunités de tournois.
+  À l'inverse, les joueurs en Asie et certains pays européens gagnent moins, indiquant des différences dans les infrastructures de l'e-sport et le soutien financier.
+   Globalement, cela illustre comment la géographie peut influencer les gains dans le domaine compétitif de l'e-sport.
