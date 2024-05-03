@@ -207,10 +207,11 @@ Nous utiliserons un diagramme simple en colonne, pour représenter la moyenne de
 
 ```{r}
 
-# Calcul de la moyenne des dégâts pour chaque catégorie de héros
+#Calcul de la moyenne
 AverageDamage <- data %>%
   group_by(Role) %>%
-  summarize(AverageDamage = mean(Damage...10min))
+  summarize(AverageDamage = mean(`Damage / 10min`))
+
 
 # Graphique
 ggplot(AverageDamage, aes(x = reorder(Role, -AverageDamage), y = AverageDamage, fill = Role)) +
