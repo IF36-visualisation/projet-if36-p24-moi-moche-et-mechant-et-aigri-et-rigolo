@@ -274,6 +274,7 @@ Pour conclure les joueurs qui jouent le même rôle n'ont pas forcément la mêm
 
 ## 4) Quelle est la moyenne des gains des joueurs en fonction de leur nationalité ?
 
+```{r}
 overwatch_players <- players[players$Game == "Overwatch", ]
 players$CountryCode <- tolower(overwatch_players$CountryCode)
 country_codes$Country_Name <- sub(",.*", "", country_codes$Country_Name)
@@ -298,6 +299,7 @@ barplot(average_earnings$TotalUSDPrize / 1000,
         xlim = c(0, max(average_earnings$TotalUSDPrize / 1000) + 100),
         ylim = c(0, 25),
         cex.names = 1)
+```
 
 ##   observations
 Le graphique montre des disparités significatives dans les gains moyens des joueurs d'Overwatch selon leur nationalité.
