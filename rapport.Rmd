@@ -195,7 +195,48 @@ players <- read_csv("./data/highest_earning_players.csv")
 country_codes <- read_csv("./data/country-and-continent-codes-list.csv")
 ```
 
-## 1) 1ère question
+## 1) Quel sont les 10 héros qui ont le plus haut taux de dégâts par seconde ?
+
+Pour répondre à cette question, nous nous appuierons sur le nombre de
+dégâts par seconde infligés par chaque héros. On peut s'attendre à
+trouver une grande partie de personnages Damage dans le lot puisque
+c'est leur utilité première. Nous ne prendrons dans ce graphique que des héros sans capacité (capacité ultime) puisque ces dernières peuvent fausser les stats.
+
+```{r}
+heroes <- rename(heroes, Damage_per_sec = `Damage per second`)
+heroes <- mutate(heroes, DPS = Damage_per_sec)
+
+#On garde Bastion qui est une exception : il possède deux formes de base dans le jeu
+heroes <- mutate(heroes, Heroes = case_when(
+  Heroes == "Bastion Recon" ~ "Bastion_Recon",
+  Heroes == "Bastion Turret" ~ "Bastion_Turret",
+  TRUE ~ Heroes
+))
+#supprimer tous les héros utilisant une capacité, ex : lucio soundwave
+heroes <- filter(heroes, !grepl(" ", Heroes))
+heroes <- arrange(heroes, desc(DPS))
+
+top_10_heroes <- head(heroes, 10)
+
+ggplot(top_10_heroes, aes(x = reorder(Heroes, -DPS), y = DPS, label = DPS)) +
+  geom_bar(stat = "identity", fill = "orange") +
+  geom_text(position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
+  labs(title = "Top 10 héros avec le plus de DPS (Hors capacités)",
+       x = "Héros",
+       y = "DPS") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank(),
+        plot.background = element_blank())
+
+
+```
+
+Observations : A l'exception de Zarya (Tank), et Zenyatta (Soin), nous retrouvons 8 héros de type Dégât dans le top 10, voilà qui confirme nos suppositions. On remarque par contre qu'un héro réalise beaucoup plus de DPS que n'importe quel autre. On pourrait, à première vue, penser que le jeu n'est pas bien équilibré, mais cela s'explique par le fait que Bastion possède deux formes, dont la forme tourelle (Bastion Turret), qui fait de lui une tourelle, assez large et immobile qui tire avec une énorme cadence. Certe le personnage fait beaucoup de dégâts par seconde, mais il est gros et très facilement touchable en contrepartie.
+
 
 ## 2) Quel rôle de héros provoque le plus de dégâts en jeu ?
 
