@@ -191,8 +191,8 @@ library(readr)
 #Importation des données
 player_data <- read_csv("./data/player_settings.csv")
 data <- read_csv("./data/ow2_quickplay_heroes_stats__2023-05-06.csv")
-players <- read_csv("./data/highest_earning_players.csv")
-country_codes <- read_csv("./data/country-and-continent-codes-list.csv")
+players <- read.csv("./data/highest_earning_players.csv")
+country_codes <- read.csv("./data/country-and-continent-codes-list.csv")
 heroes <-  read_csv("./data/Overwatch_edopic.csv")
 ```
 
@@ -316,6 +316,9 @@ Pour conclure les joueurs qui jouent le même rôle n'ont pas forcément la mêm
 
 ## 4) Quelle est la moyenne des gains des joueurs en fonction de leur nationalité ?
 
+Pour répondre à cette question, nous allons d'abord fusionner les données des joueurs avec les données des pays pour obtenir le nom complet des pays. Ensuite, nous allons agréger les gains des joueurs par nationalité et calculer la moyenne des gains pour chaque pays. Enfin, nous allons créer un graphique à barres horizontales pour visualiser les moyennes des gains par nationalité.
+Nous nous attendons à voir des disparités significatives dans les gains moyens des joueurs en fonction de leur nationalité. Les pays avec une industrie de l'e-sport plus développée ou des opportunités de tournois plus nombreuses pourraient avoir des gains moyens plus élevés. À l'inverse, les pays avec moins de soutien financier ou d'infrastructures pourraient avoir des gains moyens plus bas.
+
 ```{r}
 overwatch_players <- players[players$Game == "Overwatch", ]
 players$CountryCode <- tolower(overwatch_players$CountryCode)
@@ -344,7 +347,6 @@ barplot(average_earnings$TotalUSDPrize / 1000,
 ```
 
 ##   observations
-Le graphique montre des disparités significatives dans les gains moyens des joueurs d'Overwatch selon leur nationalité.
- Les joueurs américains dominent en termes de revenus, reflétant probablement une industrie du jeu vidéo plus robuste et de meilleures opportunités de tournois.
-  À l'inverse, les joueurs en Asie et certains pays européens gagnent moins, indiquant des différences dans les infrastructures de l'e-sport et le soutien financier.
-   Globalement, cela illustre comment la géographie peut influencer les gains dans le domaine compétitif de l'e-sport.
+
+On peut observer que les gains moyens des joueurs d'Overwatch varient considérablement en fonction de leur nationalité. Les États-Unis, la Corée du Sud et la Chine sont les pays avec les gains moyens les plus élevés, tandis que les pays européens et sud-américains ont des gains moyens plus bas. Cela peut refléter les différences dans les infrastructures de l'e-sport, les opportunités de tournois et le soutien financier pour les joueurs professionnels dans ces pays.
+
