@@ -198,10 +198,7 @@ heroes <-  read_csv("./data/Overwatch_edopic.csv")
 
 ## 1) Quel sont les 10 héros qui ont le plus haut taux de dégâts par seconde ?
 
-Pour répondre à cette question, nous nous appuierons sur le nombre de
-dégâts par seconde infligés par chaque héro. On peut s'attendre à
-trouver une grande partie de personnages Damage dans le lot puisque
-c'est leur utilité première. Nous ne prendrons dans ce graphique que des héros sans capacité (capacité ultime) puisque ces dernières peuvent fausser les stats.
+Pour répondre à cette question, nous nous appuierons sur le nombre de dégâts par seconde infligés par chaque héro. On peut s'attendre à trouver une grande partie de personnages Damage dans le lot puisque c'est leur utilité première. Nous ne prendrons dans ce graphique que des héros sans capacité (capacité ultime) puisque ces dernières peuvent fausser les stats.
 
 ```{r}
 heroes <- rename(heroes, Damage_per_sec = `Damage per second`)
@@ -238,12 +235,9 @@ ggplot(top_10_heroes, aes(x = reorder(Heroes, -DPS), y = DPS, label = DPS)) +
 
 Observations : A l'exception de Zarya (Tank), et Zenyatta (Soin), nous retrouvons 8 héros de type Dégât dans le top 10, voilà qui confirme nos suppositions. On remarque par contre qu'un héro réalise beaucoup plus de DPS que n'importe quel autre. On pourrait, à première vue, penser que le jeu n'est pas bien équilibré, mais cela s'explique par le fait que Bastion possède deux formes, dont la forme tourelle (Bastion Turret), qui fait de lui une tourelle, assez large et immobile qui tire avec une énorme cadence. Certe le personnage fait beaucoup de dégâts par seconde, mais il est gros et très facilement touchable en contrepartie.
 
-
 ## 2) Quel rôle de héros provoque le plus de dégâts en jeu ?
 
-Pour répondre à cette question, nous nous appuierons sur le nombre de dégâts infligés par les joueurs en 10 minutes, en fonction du rôle de leur héros. 
-On s'attend ici à trouver le rôle Damage en première place ; c'est en effet son but principal de provoquer des dégâts.
-Au contraire, les dégâts des héros Support devraient être bien inférieurs aux autres, leur but étant de rester à l'arrière du combat, principalement pour soigner leurs coéquipier. 
+Pour répondre à cette question, nous nous appuierons sur le nombre de dégâts infligés par les joueurs en 10 minutes, en fonction du rôle de leur héros. On s'attend ici à trouver le rôle Damage en première place ; c'est en effet son but principal de provoquer des dégâts. Au contraire, les dégâts des héros Support devraient être bien inférieurs aux autres, leur but étant de rester à l'arrière du combat, principalement pour soigner leurs coéquipier.
 
 Nous utiliserons un diagramme simple en colonne, pour représenter la moyenne des dégâts infligés en 10 min pour chaque rôle
 
@@ -270,15 +264,15 @@ ggplot(AverageDamage, aes(x = reorder(Role, -AverageDamage), y = AverageDamage, 
         plot.title = element_text(size = 16, hjust = 0.5, color = "black")) + # Taille et couleur du titre du graphique
   geom_text(aes(label = round(AverageDamage)), vjust = -0.3, size = 3.5, color = "black", fontface = "bold") 
 
-``` 
+```
 
-Plusieurs observations peuvent être faites grâce à ce graphique : 
+Plusieurs observations peuvent être faites grâce à ce graphique :
 
-Tout d'abord, les héros de type support ont en effet une moyenne de dégâts bien moins élevées que celle des autres rôles. C'est un résultat qui est attendu et sans surprise. 
+Tout d'abord, les héros de type support ont en effet une moyenne de dégâts bien moins élevées que celle des autres rôles. C'est un résultat qui est attendu et sans surprise.
 
 Par contre, contrairement à nos hypothèses, on peut remarquer le rôle Damage ne se démarque pas du rôle Tank. C'est même ce dernier qui à la moyenne la plus haute. Ce résultat peut paraître étonnant si on regarde les résultats de la question précédente ; en effet, au niveau des dégâts par seconde, les héros de type Damage sont les plus puissants.
 
-Mais la question précédente prend en compte seulement les statistiques théoriques des héros. Dans le cas de ce diagramme, les données sont des statistiques réelles, prises en jeu. Alors même si les héros de rôle Damage sont plus puissant en théorie, les type Tank sont toujours au front. Ils ont plus de vie, et donc plus de temps pour mettre des dégâts aux autres joueurs avant de mourir, même si leurs attaques sont moins puissantes. Ceci explique donc l'équilibre entre les dégâts des Tank et des Damage sur 10 minutes de jeu. 
+Mais la question précédente prend en compte seulement les statistiques théoriques des héros. Dans le cas de ce diagramme, les données sont des statistiques réelles, prises en jeu. Alors même si les héros de rôle Damage sont plus puissant en théorie, les type Tank sont toujours au front. Ils ont plus de vie, et donc plus de temps pour mettre des dégâts aux autres joueurs avant de mourir, même si leurs attaques sont moins puissantes. Ceci explique donc l'équilibre entre les dégâts des Tank et des Damage sur 10 minutes de jeu.
 
 ## 3) Est-ce que les joueurs qui joue le même rôle ont des sensibilités similaires ?
 
@@ -304,6 +298,7 @@ ggplot(player_data, aes(x = Role, y = sensibilite_standardisee, fill = Role)) +
        x = "Rôle", y = "Sensibilités") +
   theme_minimal()
 ```
+
 Tout d'abord il faut préciser que dans le jeu de données nous avons 2 informations sur la sensibilité des joueurs. On a la DPI de leur souris et leur sensibilité dans le jeu. Le problème est que ces 2 valeurs n'ont pas du tout le même ordre de grandeur et donc on ne pouvait pas les comparer même en les multipliant par exemple. On a donc réfléchi à comment avoir des valeurs comparables et on a fait un ratio en divisant la sensibilité par la DPI et en multipliant par une DPI de référence ici 800.
 
 Pour le rôle Damage, les sensibilités sont étendues mais reste tout de même entre 2 et 8-9. Il y a un ou deux joueurs qui ont une sensibilité vraiment différente et bien plus élevée.
@@ -316,8 +311,7 @@ Pour conclure les joueurs qui jouent le même rôle n'ont pas forcément la mêm
 
 ## 4) Quelle est la moyenne des gains des joueurs en fonction de leur nationalité ?
 
-Pour répondre à cette question, nous allons d'abord fusionner les données des joueurs avec les données des pays pour obtenir le nom complet des pays. Ensuite, nous allons agréger les gains des joueurs par nationalité et calculer la moyenne des gains pour chaque pays. Enfin, nous allons créer un graphique à barres horizontales pour visualiser les moyennes des gains par nationalité.
-Nous nous attendons à voir des disparités significatives dans les gains moyens des joueurs en fonction de leur nationalité. Les pays avec une industrie de l'e-sport plus développée ou des opportunités de tournois plus nombreuses pourraient avoir des gains moyens plus élevés. À l'inverse, les pays avec moins de soutien financier ou d'infrastructures pourraient avoir des gains moyens plus bas.
+Pour répondre à cette question, nous allons d'abord fusionner les données des joueurs avec les données des pays pour obtenir le nom complet des pays. Ensuite, nous allons agréger les gains des joueurs par nationalité et calculer la moyenne des gains pour chaque pays. Enfin, nous allons créer un graphique à barres horizontales pour visualiser les moyennes des gains par nationalité. Nous nous attendons à voir des disparités significatives dans les gains moyens des joueurs en fonction de leur nationalité. Les pays avec une industrie de l'e-sport plus développée ou des opportunités de tournois plus nombreuses pourraient avoir des gains moyens plus élevés. À l'inverse, les pays avec moins de soutien financier ou d'infrastructures pourraient avoir des gains moyens plus bas.
 
 ```{r}
 overwatch_players <- players[players$Game == "Overwatch", ]
@@ -347,4 +341,3 @@ barplot(average_earnings$TotalUSDPrize / 1000,
 ```
 
 Observations : On peut observer que les gains moyens des joueurs d'Overwatch varient considérablement en fonction de leur nationalité. Les États-Unis, la Corée du Sud et la Chine sont les pays avec les gains moyens les plus élevés, tandis que les pays européens et sud-américains ont des gains moyens plus bas. Cela peut refléter les différences dans les infrastructures de l'e-sport, les opportunités de tournois et le soutien financier pour les joueurs professionnels dans ces pays.
-
