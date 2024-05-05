@@ -346,7 +346,5 @@ barplot(average_earnings$TotalUSDPrize / 1000,
         cex.names = 1)
 ```
 
-##   observations
-
-On peut observer que les gains moyens des joueurs d'Overwatch varient considérablement en fonction de leur nationalité. Les États-Unis, la Corée du Sud et la Chine sont les pays avec les gains moyens les plus élevés, tandis que les pays européens et sud-américains ont des gains moyens plus bas. Cela peut refléter les différences dans les infrastructures de l'e-sport, les opportunités de tournois et le soutien financier pour les joueurs professionnels dans ces pays.
+Observations : On peut observer que les gains moyens des joueurs d'Overwatch varient considérablement en fonction de leur nationalité. Les États-Unis, la Corée du Sud et la Chine sont les pays avec les gains moyens les plus élevés, tandis que les pays européens et sud-américains ont des gains moyens plus bas. Cela peut refléter les différences dans les infrastructures de l'e-sport, les opportunités de tournois et le soutien financier pour les joueurs professionnels dans ces pays.
 
