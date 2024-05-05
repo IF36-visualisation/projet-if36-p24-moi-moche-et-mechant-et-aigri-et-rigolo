@@ -193,12 +193,13 @@ player_data <- read_csv("./data/player_settings.csv")
 data <- read_csv("./data/ow2_quickplay_heroes_stats__2023-05-06.csv")
 players <- read_csv("./data/highest_earning_players.csv")
 country_codes <- read_csv("./data/country-and-continent-codes-list.csv")
+heroes <-  read_csv("./data/Overwatch_edopic.csv")
 ```
 
 ## 1) Quel sont les 10 héros qui ont le plus haut taux de dégâts par seconde ?
 
 Pour répondre à cette question, nous nous appuierons sur le nombre de
-dégâts par seconde infligés par chaque héros. On peut s'attendre à
+dégâts par seconde infligés par chaque héro. On peut s'attendre à
 trouver une grande partie de personnages Damage dans le lot puisque
 c'est leur utilité première. Nous ne prendrons dans ce graphique que des héros sans capacité (capacité ultime) puisque ces dernières peuvent fausser les stats.
 
