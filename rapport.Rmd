@@ -276,6 +276,8 @@ Mais la question précédente prend en compte seulement les statistiques théori
 
 ## X) Quelle est la distribution de la sensibilité des joueurs, et y a-t-il des tendances notables ?
 
+On s'attend à ce que les joueurs aient globalement une sensibilité similaire. Mais il y a toujours des joueurs qui ont des façons de jouer différentes que ce soit l'inclinaison du clavier ou encore la façon de tenir la souris donc ça ne nous étonnerait pas s'il y a quelques joueurs qui sortent du lot.
+
 ```{r}
 max_count <- max(ggplot_build(ggplot(player_data, aes(x = sensibilite_standardisee)) +
                                 geom_histogram(binwidth = 2))$data[[1]]$count)
@@ -291,6 +293,13 @@ ggplot(player_data, aes(x = sensibilite_standardisee)) +
                                                         geom_histogram(binwidth = 2))$data[[1]]$count, na.rm = TRUE), by = 10)) + 
   theme_minimal()
 ```
+Tout d'abord il faut préciser que dans le jeu de données nous avons 2 informations sur la sensibilité des joueurs. On a la DPI de leur souris et leur sensibilité dans le jeu. Le problème est que ces 2 valeurs n'ont pas du tout le même ordre de grandeur et donc on ne pouvait pas les comparer même en les multipliant par exemple. On a donc réfléchi à comment avoir des valeurs comparables et on a fait un ratio en divisant la sensibilité par la DPI et en multipliant par une DPI de référence ici 800.
+
+Comme on avait pu le prédire, la sensibilité dite "normale" a l'air de se situer autour des 1 à 8. La plupart des joueurs sont entre 4 et 6 et deux grande partie du reste se situe autour de ces valeurs. 
+
+Nous avons quelques joueurs avec des sensibilités extrémements élevés : ici entre 16 et 18 et entre 22 et 24. Comme nous l'avions dit précedemment il y a toujours des joueurs qui ont une façon de jouer bien à eux et cela prouve qu'il n'y a pas de norme mais que chacun joue comme il se sent le mieux. 
+
+Les joueurs avec une sensibilité au-dessus de 8 sont également assez rares avec une dizaine entre 8 et 10 et 5 joueurs entre 10 et 14.
 
 ## X) Est-ce que les joueurs qui joue le même rôle ont des sensibilités similaires ?
 
@@ -317,7 +326,6 @@ ggplot(player_data, aes(x = Role, y = sensibilite_standardisee, fill = Role)) +
   theme_minimal()
 ```
 
-Tout d'abord il faut préciser que dans le jeu de données nous avons 2 informations sur la sensibilité des joueurs. On a la DPI de leur souris et leur sensibilité dans le jeu. Le problème est que ces 2 valeurs n'ont pas du tout le même ordre de grandeur et donc on ne pouvait pas les comparer même en les multipliant par exemple. On a donc réfléchi à comment avoir des valeurs comparables et on a fait un ratio en divisant la sensibilité par la DPI et en multipliant par une DPI de référence ici 800.
 
 Pour le rôle Damage, les sensibilités sont étendues mais reste tout de même entre 2 et 8-9. Il y a un ou deux joueurs qui ont une sensibilité vraiment différente et bien plus élevée.
 
@@ -329,6 +337,8 @@ Pour conclure les joueurs qui jouent le même rôle n'ont pas forcément la mêm
 
 ## X) Est ce que les joueurs damage ont une plus grosse sensibilité afin de pouvoir mettre des flicks ?
 
+On peut s'attendre à ce que les joueurs damage aient une plus sensibilité car ils sont au coeur du combat et pourraient avoir besoin de se retourner plus souvent par exemple.
+
 ```{r}
 mean_data <- aggregate(sensibilite_standardisee ~ Role, data = player_data, FUN = mean)
 
@@ -339,8 +349,15 @@ ggplot(mean_data, aes(x = Role, y = sensibilite_standardisee, fill = Role)) +
        x = "Rôle", y = "Moyenne des sensibilités") +
   theme_minimal()
 ```
+Ce graphique est à la suite du précédent car on voyait clairement la distribution des sensibilités mais on ne voyait pas en moyenne qui avait la plus grosse sensibilité.
+
+Mais nos attentes étaient donc fausses, c'est le rôle Tank qui a en moyenne une plus grosse sensibilité. 
+Le rôle Damage a carrément une plus petite sensibilité que le rôle Support.
+On ne sait pas vraiment comment l'expliquer, on ne pense simplement que le choix du rôle n'impact pas tant que ça la sensibilité. 
 
 ## X) Est ce que les joueurs damage privilégient les souris plus légères contrairement aux autres rôles ?
+
+On peut s'attendre à ce que ce soit le cas pour les mêmes raisons que la question précédente.
 
 ```{r}
 ggplot(player_data, aes(x = Role, y = MouseWeight, fill = Role)) +
@@ -349,6 +366,13 @@ ggplot(player_data, aes(x = Role, y = MouseWeight, fill = Role)) +
        x = "Rôle", y = "Poids de la souris (g)") +
   theme_minimal()
 ```
+
+Le poids des souris du rôle Damage est très étendu, entre 50 et 120.
+Pour le rôle Support c'est entre 50 et 112 et pour Tank entre 60 et 112.
+On remarque une tendance pour tous les rôles autour des 80-90 et quelques exceptions dans chaque rôle avec des souris plus légères et plus lourdes.
+
+Mais comme pour la question précédente, le rôle n'impact pas clairement le poids de la souris. Ces deux questions sont un peu "décalées" de la réalité car on pensait qu'il pouvait avoir une différence notable mais le gameplay entre Damage et les autres rôles ne doit pas tant différer que ça. 
+Peut-être que dans d'autres jeux les rôles Damage ou Duellist ont vraiment des sensibilités très différentes et des souris plus légères mais ce n'est pas le cas pour Overwatch.
 
 ## 4) Quelle est la moyenne des gains des joueurs en fonction de leur nationalité ?
 
