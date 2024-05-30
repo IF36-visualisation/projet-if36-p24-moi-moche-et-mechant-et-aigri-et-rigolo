@@ -274,7 +274,25 @@ Par contre, contrairement à nos hypothèses, on peut remarquer le rôle Damage 
 
 Mais la question précédente prend en compte seulement les statistiques théoriques des héros. Dans le cas de ce diagramme, les données sont des statistiques réelles, prises en jeu. Alors même si les héros de rôle Damage sont plus puissant en théorie, les type Tank sont toujours au front. Ils ont plus de vie, et donc plus de temps pour mettre des dégâts aux autres joueurs avant de mourir, même si leurs attaques sont moins puissantes. Ceci explique donc l'équilibre entre les dégâts des Tank et des Damage sur 10 minutes de jeu.
 
-## 3) Est-ce que les joueurs qui joue le même rôle ont des sensibilités similaires ?
+## X) Quelle est la distribution de la sensibilité des joueurs, et y a-t-il des tendances notables ?
+
+```{r}
+max_count <- max(ggplot_build(ggplot(player_data, aes(x = sensibilite_standardisee)) +
+                                geom_histogram(binwidth = 2))$data[[1]]$count)
+
+
+ggplot(player_data, aes(x = sensibilite_standardisee)) +
+  geom_histogram(binwidth = 2, fill = "skyblue", color = "black", boundary = 0) +
+  labs(title = "Distribution de la sensibilité de tous les joueurs",
+       x = "Sensibilité",
+       y = "Nombre de joueurs") +
+  scale_x_continuous(breaks = seq(0, max(player_data$sensibilite_standardisee, na.rm = TRUE), by = 2)) +
+  scale_y_continuous(breaks = seq(0, max(ggplot_build(ggplot(player_data, aes(x = sensibilite_standardisee)) + 
+                                                        geom_histogram(binwidth = 2))$data[[1]]$count, na.rm = TRUE), by = 10)) + 
+  theme_minimal()
+```
+
+## X) Est-ce que les joueurs qui joue le même rôle ont des sensibilités similaires ?
 
 On peut effectivement s'attendre à ce que les mêmes rôles partagent globalement la même façon de jouer et ont donc des sensibilités similaires.
 
@@ -308,6 +326,29 @@ Pour le rôle Support, les sensibilités sont déjà plus étendues allant de 2 
 Et pour le rôle Tank, elles sont aussi relativement étendues allant de 2 à 15 avec tout de même beaucoup de joueurs aux alentours de 6.
 
 Pour conclure les joueurs qui jouent le même rôle n'ont pas forcément la même sensibilité car on peut observer une large gamme dans les trois rôles. On observe quand même une sensibilité avec une fréquence élevée pour les rôles Support et Tank à 4 et 6 respectivement.
+
+## X) Est ce que les joueurs damage ont une plus grosse sensibilité afin de pouvoir mettre des flicks ?
+
+```{r}
+mean_data <- aggregate(sensibilite_standardisee ~ Role, data = player_data, FUN = mean)
+
+# Graphique à barres des moyennes de sensibilité par rôle
+ggplot(mean_data, aes(x = Role, y = sensibilite_standardisee, fill = Role)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Moyenne des sensibilités par rôle",
+       x = "Rôle", y = "Moyenne des sensibilités") +
+  theme_minimal()
+```
+
+## X) Est ce que les joueurs damage privilégient les souris plus légères contrairement aux autres rôles ?
+
+```{r}
+ggplot(player_data, aes(x = Role, y = MouseWeight, fill = Role)) +
+  geom_violin() +
+  labs(title = "Répartition des poids de souris par rôle",
+       x = "Rôle", y = "Poids de la souris (g)") +
+  theme_minimal()
+```
 
 ## 4) Quelle est la moyenne des gains des joueurs en fonction de leur nationalité ?
 
