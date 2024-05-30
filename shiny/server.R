@@ -12,6 +12,7 @@ generate_colors <- function(num_colors) {
 # Define server logic required to draw the plot
 function(input, output, session) {
   
+  #Graphique juliette
   output$heroPlot <- renderPlot({
     # Calcul du nombre de fois que chaque héros est joué et tri par ordre décroissant
     hero_counts <- player_data %>%
@@ -54,5 +55,7 @@ function(input, output, session) {
             axis.text.y = element_text(size = 10),
             plot.title = element_text(size = 14, face = "bold")) +
       scale_fill_manual(values = hero_colors)
+    
+    # fin graphique juliette
   })
 }
