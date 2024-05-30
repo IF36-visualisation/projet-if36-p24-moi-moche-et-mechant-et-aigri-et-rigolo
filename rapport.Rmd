@@ -187,16 +187,221 @@ library(ggplot2)
 library(readr)
 library(maps)
 library(ggmap)
+library(GGally)
 ```
 
 ```{r}
 #Importation des données
 player_data <- read_csv("./data/player_settings.csv")
 data <- read_csv("./data/ow2_quickplay_heroes_stats__2023-05-06.csv")
+datas1 <- read_csv("./data/ow2_season_01_FINAL_heroes_stats__2023-05-06.csv")
+datas2 <- read_csv("./data/ow2_season_02_FINAL_heroes_stats__2023-05-06.csv")
+datas3 <- read_csv("./data/ow2_season_03_FINAL_heroes_stats__2023-05-06.csv")
+datas4 <- read_csv("./data/ow2_season_04_FINAL_heroes_stats__2023-06-27.csv")
 players <- read_csv("./data/highest_earning_players.csv")
 country_codes <- read_csv("./data/country-and-continent-codes-list.csv")
 heroes <-  read_csv("./data/Overwatch_edopic.csv")
 ```
+## XX) Quels sont les héros les plus/moins joués ?
+
+Comme dit dans l'introduction, cette question seule sera compliquée à analyser ; on aura des informations sur les héros les plus joués sans pouvoir définir pourquoi. Pourtant cette question sera la base pour analyser les visualisations suivantes, ou inversement, les analyses suivantes pourront nous permettre d'expliquer pourquoi certains héros sont plus ou moins joués. 
+
+On pourra aussi dans cette question regarder les rôles des héros les plus joués.
+
+Ici la visualisation utilisée est simplement un graphique en colonnes. J'avais fait une première visualisation en treemap mais le résultat n'étant pas convaincant, les différences n'étaient pas assez marquées pour analyser correctement. J'ai choisi de laisser seulement les 10 premiers et les 10 derniers car mettre tous les héros sur un même graphique le rend illisible et compliqué à analyser. 
+
+D'abord visualisons les 10 héros les plus joués :
+
+```{r}
+
+# Prendre tous les niveaux de joueurs
+All_skilltier <- subset(data, `Skill Tier` == "All")
+
+# Héros les plus joués tous niveaux confondus
+ggplot(top_n(All_skilltier, 10, `Pick Rate, %`), 
+       aes(x = reorder(Hero, -`Pick Rate, %`), y = `Pick Rate, %`, fill = Role)) +
+  geom_col() +
+  theme_minimal() +
+  labs(title = "10 Héros les plus joués tous niveaux confondus", x = "Héros", y = "Pick Rate (%)") +
+  theme(axis.text.x = element_text(angle = 35, hjust = 1))
+
+``` 
+La première chose à remarquer est que trois héros se démarquent légèrement des autres ; Ana, Mercy et Genji. J'ai modélisé le même graphique pour les joueurs du rang le plus faible et le plus fort, et ce top 3 reste le même à chaque fois, à quelques différences près, je n'ai donc pas inclus les graphiques ici. 
+
+Après quelques recherches internet, j'ai vu que ces trois héros, et dans l'ensemble la plupart de ces 10 héros sont considérés parmis les plus difficiles à jouer ; ils ont donc sûrement une profondeur de jeu qui les rend très puissants quand ils sont bien joués, ce qui les rendent indispensables dans les compositions d'équipes de haut niveau. Pour ce qui est des joueurs plus bas niveau, on peut facilement imaginer qu'ils choisissent des héros joués à très haut niveaux et donc considérés comme les meilleurs héros. 
+
+Il est assez étonnant de voir 4 héros de type Support sur les 10 plus joués ; en effet il n'en existe que 8 sur les 36 héros de mon jeu de données. Cela peut être dû au fait qu'ils sont indispensable dans une composition, ou qu'ils offrent une variété de style de jeu. 
+
+
+Nos visualisations suivantes nous permettrons peut-être de compléter ou d'amener de nouvelles interprétations à ces résultats.
+
+
+## XX) Quel rôle de héros provoque le plus de dégâts en jeu ?
+
+Pour répondre à cette question, nous nous appuierons sur le nombre de dégâts infligés par les joueurs en 10 minutes, en fonction du rôle de leur héros. 
+On s'attend ici à trouver le rôle Damage en première place ; c'est en effet son but principal de provoquer des dégâts.
+Au contraire, les dégâts des héros Support devraient être bien inférieurs aux autres, leur but étant de rester à l'arrière du combat, principalement pour soigner leurs coéquipier. 
+
+Après une première visualisation en utilisant un simple diagramme en colonne, je me suis rendu compte qu'il pourrait être intéressant de visualiser la répartition des dégâts en fonction du rôle en plus de la moyenne.
+J'ai donc finalement opté pour un diagramme en violon : 
+
+```{r}
+# Calculer la moyenne des dégâts pour chaque catégorie de héros
+AverageDamage <- data %>%
+  group_by(Role) %>%
+  summarize(AverageDamage = mean(`Damage / 10min`))
+
+# Graphique en violon
+ggplot(data, aes(x = Role, y = `Damage / 10min`, fill = Role)) +
+  geom_violin(trim = FALSE) + 
+  labs(title = "Distribution des dégâts par catégorie de héros",
+       x = "Catégorie de héros",
+       y = "Dégâts (10min)") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        panel.grid.major = element_blank(),
+        axis.line = element_line(color = "black"),
+        axis.text = element_text(size = 12, color = "black"),
+        axis.title = element_text(size = 14, color = "black"),
+        plot.title = element_text(size = 16, hjust = 0.5, color = "black")) +
+  geom_point(data = AverageDamage, aes(x = Role, y = AverageDamage), color = "black", size = 2.5) + # Moyennes
+  geom_text(data = AverageDamage, aes(x = Role, y = AverageDamage, label = round(AverageDamage)), vjust = -0.8, size = 3.5, color = "black", fontface = "bold") +
+  scale_fill_manual(values = c("#199ace", "#4dd3f1", "#1632b0"))
+
+``` 
+
+Plusieurs observations peuvent être faites grâce à ce graphique : 
+
+Tout d'abord, les héros de type support ont en effet une moyenne de dégâts bien moins élevées que celle des autres rôles. C'est un résultat qui est attendu et sans surprise. 
+
+Par contre, contrairement à nos hypothèses, on peut remarquer le rôle Damage ne se démarque pas du rôle Tank. C'est même ce dernier qui à la moyenne la plus haute. Ce résultat peut paraître étonnant si on regarde les résultats de la question précédente ; en effet, au niveau des dégâts par seconde, les héros de type Damage sont les plus puissants.
+
+Mais la question précédente prend en compte seulement les statistiques théoriques des héros. Dans le cas de ce diagramme, les données sont des statistiques réelles, prises en jeu. Alors même si les héros de rôle Damage sont plus puissant en théorie, les type Tank sont toujours au front. Ils ont plus de vie, et donc plus de temps pour mettre des dégâts aux autres joueurs avant de mourir, même si leurs attaques sont moins puissantes. Ceci explique donc l'équilibre entre les dégâts des Tank et des Damage sur 10 minutes de jeu. 
+
+Par contre, on peut remarquer que la distribution des dégâts est bien plus faible chez les tanks, alors qu'elle est bien plus étendue chez les type Damage ; on peut penser que le rôle des tanks n'étant pas principalement de faire des dégâts, leurs statistiques sont assez proches de ce côté-là. Au contraire, c'est le but des héros Damage ; ils ont donc tous leur particularités concernant les dégâts qu'ils vont provoquer, selon la manière de jouer. Ce qui explique la répartition bien plus étendue. 
+
+Les rôles support ont aussi une répartition assez répandue mais il existe assez peu de héros de ce type donc il est difficile d'en tirer des conclusions. 
+
+## XX) Quel est le lien entre le taux de sélection d'un héros et son nombre de dégâts sur 10min ?
+
+Pour trouver cette question, j'ai tout d'abord effectué une matrice avec ggpairs pour essayer de trouver des corrélations entre mes variables de dégâts, de KDA Ratio, de fréquence de choix et de taux de victoires. Le plus haut coefficient de corrélation se trouvait entre le taux de sélection du héros et le nombre de dégâts sur 10min.
+
+Avant de m'y intéresser d'avantage, je pensais logiquement qu'un héros faisant plus de dégâts avait plus de chance d'être choisi, ou alors qu'il n'y avait aucune corrélation entre les deux.
+
+Les deux variables étant quantitatives, j'ai utilisé un nuage de points pour visualiser.
+
+
+```{r}
+
+# Prendre tous les niveaux de joueurs
+All_skilltier <- subset(data, `Skill Tier` == "All")
+
+# Calculer la corrélation
+correlation <- cor(All_skilltier$`Pick Rate, %`, All_skilltier$`Damage / 10min`)
+
+# Créer le graphique
+ggplot(All_skilltier, 
+       aes(x = `Pick Rate, %`, y = `Damage / 10min`)) +
+  geom_point(aes(color = Role), size = 3) + 
+  geom_smooth(method = lm, se = FALSE, color = "black") + # Ligne de tendance 
+  labs(title = "Sélection des héros en fonction des dégâts sur 10min", 
+       x = "Fréquence de sélection (%)", 
+       y = "Dégâts sur 10min") +
+  annotate("text", x = Inf, y = Inf, 
+           label = paste("Corrélation:", round(correlation, 3)), 
+           hjust = 1.1, vjust = 2, size = 4, color = "black") +
+  theme_minimal()
+
+``` 
+
+On peut donc voir que sur ce graphique, le coefficient de corrélation est de -0,593. C'est assez fort pour être noté, mais cela reste un résultat à prendre avec des pincettes car il peut toujours être dû au hasard. 
+
+D'ailleurs, ce résultat est plutôt inattendu. Le coefficient de corrélation négatif nous indique que plus les héros font de dégâts sur 10min de jeu, moins ce sont des héros choisis. 
+Il est donc difficile d'interpréter ce graphique et de trouver des raisons à ce potentiel lien. 
+
+En conclusion, bien que ce coefficient de corrélation négatif soit notable, son interprétation nécessiterait une analyse plus approfondie pour tirer des conclusions solides sur la relation entre les éliminations par 10 minutes et le choix des héros.
+Ce chiffre peut très bien être dû au hasard.
+
+## XX) Quels joueurs ont le meilleur ratio en jeu ?
+
+Une des manières de comparer les joueurs est de regarder leur KDA Ratio (Kill, Deaths, Assists Ratio), c'est-à-dire le ratio entre le nombre de joueurs tués (ou contribué à tuer) et le nombre de morts du joueur. Un ratio élevé indique généralement une bonne performance, car le joueur participe à plus d'éliminations (kills et assistances) tout en mourant moins souvent. Par exemple, un KDA Ratio de 2 veut dire qu'en moyenne, pour chaque mort, un joueur fera 2 éliminations. 
+
+On peut logiquement penser que plus le joueur à un niveau élevé, plus son ratio sera élevé aussi, car un bon joueur est un joueur qui fait un maximum d'éliminations avec un minimum de morts.
+
+Pour ce graphique, j'ai décidé de faire un boxplot (ou diagramme en boîte et moustache), qui permettra de visualiser la distribution du KDA Ratio par niveau de joueur et de les comparer facilement les unes aux autres.
+
+```{r}
+# Convertir la colonne Skill.Tier en facteur avec les niveaux spécifiés
+data$`Skill Tier` <- factor(data$`Skill Tier`, 
+                            levels = c("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "Grandmaster", "All"))
+
+# Comparaison des KDA par niveau
+ggplot(data, 
+       aes(x = `Skill Tier`, y = `KDA Ratio`, fill = `Skill Tier`)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(title = "Comparaison du KDA Ratio par niveau de joueur", 
+       x = "Niveau de joueur", 
+       y = "KDA Ratio") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(hjust = 0.3), 
+        legend.position = "none") +
+  coord_cartesian(ylim = c(2.5, 5))
+
+
+``` 
+
+Tout d'abord il est important de préciser qu'en abscisse, le ratio varie entre 2.5 et 5. Ces valeurs ont été choisies pour voir au mieux les boxplot. Notre but étant de les comparer entre elles et non de savoir si le ratio est important ou pas, il n'est pas grave d'avoir un graphique qui ne commence pas à 0. 
+
+Ensuite, on peut observer sur ce graphique que du niveau Bronze à Diamant, on observe une augmentation proportionnelle du ratio des joueurs. Puis jusqu'à Grand Maître, le ratio reste à peu près constant. Même si ces différences ne sont pas très élevées, on peut quand même en déduire qu'en effet, il semble y avoir une augmentation du ratio en montant de niveau de jeu, comme imaginé dans les hypothèses. C'est une observation plutôt logique et attendue. 
+
+Pour autant cette croissance reste peu marquée et s'estompe arrivée à plus haut niveau ; cela peut-être expliqué par le fait que quand on monte de niveau, nos adversaires montent de niveau aussi. Ainsi même si un joueur en Grand Maître sera meilleur qu'un joueur en Diamant, comme ses adversaires seront aussi des Grand Maîtres, ils seront plus difficiles à éliminer et donc le ratio du joueur n'augmentera pas forcément.
+
+## XX) Comment les dégâts provoqués ont-ils évolués selon les saisons ?
+
+
+Mon dataset comprenant des données sur les 4 saisons du jeu, il me paraît intéressant de visualiser l'évolution du jeu et des joueurs. 
+Pour cela j'ai décidé de comparer les dégâts sur 10min en jeu, pour les différents rôles et par saison. 
+
+Avant de construire mon graphique, j'avais plusieurs hypothèses ;
+Soit le nombre de dégâts augmente avec les saisons, car les joueurs découvrent de mieux en mieux le jeu et donc s'améliorent.
+Soit le nombre de dégâts reste à peu près constant, ce qui serait logique aussi car les statistiques des différents héros sont souvent modifiées pour qu'ils soient les plus équilibrés possible. L'objectif des créateurs peut être de garder les stats en jeu constantes en modifiant leurs héros si besoin.
+
+J'ai utilisé un graphique en colonne en regroupant en abscisses par rôle, avec une colonne par saison pour chaque rôle afin d'étudier l'évolution des dégâts par saison facilement. 
+
+```{r}
+# Calculer la moyenne des Damage / 10min pour chaque rôle dans chaque dataset
+mean_datas1 <- datas1 %>% group_by(Role) %>% summarise(mean_damage = mean(`Damage / 10min`))
+mean_datas2 <- datas2 %>% group_by(Role) %>% summarise(mean_damage = mean(`Damage / 10min`))
+mean_datas3 <- datas3 %>% group_by(Role) %>% summarise(mean_damage = mean(`Damage / 10min`))
+mean_datas4 <- datas4 %>% group_by(Role) %>% summarise(mean_damage = mean(`Damage / 10min`))
+
+# Ajouter une colonne pour identifier les jeux de données
+mean_datas1$Dataset <- "Datas1"
+mean_datas2$Dataset <- "Datas2"
+mean_datas3$Dataset <- "Datas3"
+mean_datas4$Dataset <- "Datas4"
+
+# Combiner les moyennes dans un seul dataframe
+combined_means <- bind_rows(mean_datas1, mean_datas2, mean_datas3, mean_datas4)
+
+# Choisir les couleurs
+color_gradient <- c("#ffbd6e", "#ff83a6", "#98eeff", "#83ffb0")
+
+# Créer le diagramme en colonnes avec les moyennes affichées
+ggplot(combined_means, aes(x = Role, y = mean_damage, fill = Dataset)) +
+  geom_col(position = position_dodge(width = 0.97), alpha = 1) +
+  geom_text(aes(label = round(mean_damage)), position = position_dodge(width = 0.9), vjust = -0.5) +
+  labs(title = "Moyenne de dégâts sur 10min, par rôle et par saison",
+       x = "Rôle",
+       y = "Moyenne des dégâts sur 10 minutes") +
+  scale_fill_manual(values = color_gradient) +
+  theme_minimal()
+``` 
+Notre visualisation nous permet de voir qu'en effet, le nombre de dégâts par saison reste à peu près constant pour tous les rôles. On peut donc penser que les créateurs du jeu cherchent à garder les statistiques des joueurs proches d'une saison à une autre, et donc de modifier les capacités des héros en fonction. 
+
+Pourtant, on remarque quand même une légère augmentation pour chaque rôle entre la saison 1 et la saison 2. On peut donc penser que notre première hypothèse n'est pas fausse et qu'en effet, les joueurs se sont améliorés entre ces deux saisons, avant que les héros soient modifiés pour empêcher une trop grosse augmentation avec le temps. 
+
+Ces hypothèses restent discutables, et peut-être que les légères variations visibles sont dûes au hasard ou à d'autres facteurs non étudiés.
 
 ## 1) Quel sont les 10 héros qui ont le plus haut taux de dégâts par seconde ?
 
@@ -237,44 +442,6 @@ ggplot(top_10_heroes, aes(x = reorder(Heroes, -DPS), y = DPS, label = DPS)) +
 
 Observations : A l'exception de Zarya (Tank), et Zenyatta (Soin), nous retrouvons 8 héros de type Dégât dans le top 10, voilà qui confirme nos suppositions. On remarque par contre qu'un héro réalise beaucoup plus de DPS que n'importe quel autre. On pourrait, à première vue, penser que le jeu n'est pas bien équilibré, mais cela s'explique par le fait que Bastion possède deux formes, dont la forme tourelle (Bastion Turret), qui fait de lui une tourelle, assez large et immobile qui tire avec une énorme cadence. Certe le personnage fait beaucoup de dégâts par seconde, mais il est gros et très facilement touchable en contrepartie.
 
-## 2) Quel rôle de héros provoque le plus de dégâts en jeu ?
-
-Pour répondre à cette question, nous nous appuierons sur le nombre de dégâts infligés par les joueurs en 10 minutes, en fonction du rôle de leur héros. On s'attend ici à trouver le rôle Damage en première place ; c'est en effet son but principal de provoquer des dégâts. Au contraire, les dégâts des héros Support devraient être bien inférieurs aux autres, leur but étant de rester à l'arrière du combat, principalement pour soigner leurs coéquipier.
-
-Nous utiliserons un diagramme simple en colonne, pour représenter la moyenne des dégâts infligés en 10 min pour chaque rôle
-
-```{r}
-
-#Calcul de la moyenne
-AverageDamage <- data %>%
-  group_by(Role) %>%
-  summarize(AverageDamage = mean(`Damage / 10min`))
-
-
-# Graphique
-ggplot(AverageDamage, aes(x = reorder(Role, -AverageDamage), y = AverageDamage, fill = Role)) +
-  geom_col(width = 0.7, color = NA, position = "dodge",  fill = c("#199ace", "#4dd3f1", "#1632b0")) + 
-  labs(title = "Moyenne des dégâts par catégorie de héros", # Titres
-       x = "Catégorie de héros",
-       y = "Moyenne des dégâts (10min)") +
-  theme_minimal() + # Thème minimal
-  theme(legend.position = "none",
-        panel.grid.major = element_blank(), # Pas de lignes de grille majeures
-        axis.line = element_line(color = "black"), # Couleur de la ligne d'axe
-        axis.text = element_text(size = 12, color = "black"), # Taille et couleur du texte de l'axe
-        axis.title = element_text(size = 14, color = "black"), # Taille et couleur du titre de l'axe
-        plot.title = element_text(size = 16, hjust = 0.5, color = "black")) + # Taille et couleur du titre du graphique
-  geom_text(aes(label = round(AverageDamage)), vjust = -0.3, size = 3.5, color = "black", fontface = "bold") 
-
-```
-
-Plusieurs observations peuvent être faites grâce à ce graphique :
-
-Tout d'abord, les héros de type support ont en effet une moyenne de dégâts bien moins élevées que celle des autres rôles. C'est un résultat qui est attendu et sans surprise.
-
-Par contre, contrairement à nos hypothèses, on peut remarquer le rôle Damage ne se démarque pas du rôle Tank. C'est même ce dernier qui à la moyenne la plus haute. Ce résultat peut paraître étonnant si on regarde les résultats de la question précédente ; en effet, au niveau des dégâts par seconde, les héros de type Damage sont les plus puissants.
-
-Mais la question précédente prend en compte seulement les statistiques théoriques des héros. Dans le cas de ce diagramme, les données sont des statistiques réelles, prises en jeu. Alors même si les héros de rôle Damage sont plus puissant en théorie, les type Tank sont toujours au front. Ils ont plus de vie, et donc plus de temps pour mettre des dégâts aux autres joueurs avant de mourir, même si leurs attaques sont moins puissantes. Ceci explique donc l'équilibre entre les dégâts des Tank et des Damage sur 10 minutes de jeu.
 
 ## X) Quelle est la distribution de la sensibilité des joueurs, et y a-t-il des tendances notables ?
 
