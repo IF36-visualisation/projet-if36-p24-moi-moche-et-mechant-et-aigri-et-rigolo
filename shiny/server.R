@@ -1,8 +1,13 @@
 library(shiny)
 library(dplyr)
 library(ggplot2)
-library(maps)
-library(RColorBrewer)
+library(readr)
+
+# Charger les datasets
+datas1 <- read_csv("../data/ow2_season_01_FINAL_heroes_stats__2023-05-06.csv")
+datas2 <- read_csv("../data/ow2_season_02_FINAL_heroes_stats__2023-05-06.csv")
+datas3 <- read_csv("../data/ow2_season_03_FINAL_heroes_stats__2023-05-06.csv")
+datas4 <- read_csv("../data/ow2_season_04_FINAL_heroes_stats__2023-06-27.csv")
 
 # Fonction pour générer un vecteur de couleurs
 generate_colors <- function(num_colors) {
@@ -11,46 +16,7 @@ generate_colors <- function(num_colors) {
   color_gradient(num_colors)
 }
 
-# Logique du serveur pour dessiner les graphiques
-function(input, output, session) {
-  
-  # Graphique de la sensibilité des héros
-  output$heroPlot <- renderPlot({
-    hero_counts <- player_data %>%
-      group_by(Hero) %>%
-      summarize(count = n()) %>%
-      arrange(desc(count))
-    
-    top_heroes <- hero_counts %>%
-      top_n(input$num, count) %>%
-      pull(Hero)
-    
-    top_heroes_data <- player_data %>%
-      filter(Hero %in% top_heroes)
-    
-    mean_sensibilite <- top_heroes_data %>%
-      group_by(Hero) %>%
-      summarize(mean_sensibilite_standardisee = mean(sensibilite_standardisee))
-    
-    top_heroes_sensibilite <- hero_counts %>%
-      filter(Hero %in% top_heroes) %>%
-      left_join(mean_sensibilite, by = "Hero") %>%
-      arrange(desc(count))
-    
-    hero_colors <- generate_colors(length(top_heroes))
-    
-    ggplot(top_heroes_sensibilite, aes(x = reorder(Hero, -count), 
-                                       y = mean_sensibilite_standardisee, fill = Hero)) +
-      geom_bar(stat = "identity") +
-      geom_text(aes(label = round(mean_sensibilite_standardisee, 1)), vjust = -0.3) +
-      labs(title = "Moyenne des sensibilités des héros les plus joués",
-           x = "Héros", y = "Moyenne des sensibilités") +
-      theme_minimal() +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
-            axis.text.y = element_text(size = 10),
-            plot.title = element_text(size = 14, face = "bold")) +
-      scale_fill_manual(values = hero_colors)
-  })
+shinyServer(function(input, output) {
   
   # Logique pour le rendu de la carte des gains des joueurs
   output$gameMap <- renderPlot({
@@ -90,4 +56,55 @@ function(input, output, session) {
         else "Moyenne des Gains par Nationalité des Joueurs de Jeux Vidéo") +
       theme_minimal()
   })
-}
+  
+  # Logique pour le rendu du graphique des héros les plus joués
+  output$topHeroesPlot <- renderPlot({
+    # Prendre tous les niveaux de joueurs
+    All_skilltier <- subset(data, `Skill Tier` == "All")
+    
+    # Héros les plus joués tous niveaux confondus
+    ggplot(top_n(All_skilltier, input$num, `Pick Rate, %`), 
+           aes(x = reorder(Hero, -`Pick Rate, %`), y = `Pick Rate, %`, fill = Role)) +
+      geom_col() +
+      theme_minimal() +
+      labs(title = "Héros les plus joués tous niveaux confondus", x = "Héros", y = "Pick Rate (%)") +
+      theme(axis.text.x = element_text(angle = 35, hjust = 1))
+  })
+  
+  # Logique pour le rendu du graphique des dégâts par saison
+  output$seasonalDamagePlot <- renderPlot({
+    # Filtrer les saisons sélectionnées
+    selected_datasets <- list()
+    for (season in input$seasons) {
+      selected_datasets[[season]] <- get(paste0("datas", gsub("s", "", season)))
+    }
+    
+    # Calculer la moyenne des Damage / 10min pour chaque rôle dans chaque dataset sélectionné
+    mean_damages <- lapply(selected_datasets, function(data) {
+      data %>% group_by(Role) %>% summarise(mean_damage = mean(`Damage / 10min`))
+    })
+    
+    # Ajouter une colonne pour identifier les jeux de données
+    names(mean_damages) <- input$seasons
+    mean_damages <- lapply(names(mean_damages), function(name) {
+      mean_damages[[name]] %>% mutate(Dataset = name)
+    })
+    
+    # Combiner les moyennes dans un seul dataframe
+    combined_means <- bind_rows(mean_damages)
+    
+    # Choisir les couleurs
+    color_gradient <- c("#ffbd6e", "#ff83a6", "#98eeff", "#83ffb0")
+    
+    # Créer le diagramme en colonnes avec les moyennes affichées
+    ggplot(combined_means, aes(x = Role, y = mean_damage, fill = Dataset)) +
+      geom_col(position = position_dodge(width = 0.97), alpha = 1) +
+      geom_text(aes(label = round(mean_damage)), position = position_dodge(width = 0.9), vjust = -0.5) +
+      labs(title = "Moyenne de dégâts sur 10min, par rôle et par saison",
+           x = "Rôle",
+           y = "Moyenne des dégâts sur 10 minutes") +
+      scale_fill_manual(values = color_gradient) +
+      theme_minimal()
+  })
+  
+})
