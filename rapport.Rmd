@@ -526,6 +526,15 @@ Les valeurs ne suivent aucune tendance. Il n'y a donc aucun rapport entre les po
 On s'attend à ce que les joueurs aient globalement une sensibilité similaire. Mais il y a toujours des joueurs qui ont des façons de jouer différentes que ce soit l'inclinaison du clavier ou encore la façon de tenir la souris donc ça ne nous étonnerait pas s'il y a quelques joueurs qui sortent du lot.
 
 ```{r}
+dpi_reference <- 800
+
+player_data$Sensitivity <- as.numeric(player_data$Sensitivity)
+player_data$DPI <- as.numeric(player_data$DPI)
+
+player_data <- player_data %>% 
+  mutate(ratio_sensibilite = Sensitivity / DPI,
+         sensibilite_standardisee = ratio_sensibilite * dpi_reference)
+
 max_count <- max(ggplot_build(ggplot(player_data, aes(x = sensibilite_standardisee)) +
                                 geom_histogram(binwidth = 2))$data[[1]]$count)
 
