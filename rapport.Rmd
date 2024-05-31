@@ -408,20 +408,20 @@ Ces hypothèses restent discutables, et peut-être que les légères variations 
 Pour répondre à cette question, nous nous appuierons sur le nombre de dégâts par seconde infligés par chaque héro. On peut s'attendre à trouver une grande partie de personnages Damage dans le lot puisque c'est leur utilité première. Nous ne prendrons dans ce graphique que des héros sans capacité (capacité ultime) puisque ces dernières peuvent fausser les stats.
 
 ```{r}
-heroes <- rename(heroes, Damage_per_sec = `Damage per second`)
-heroes <- mutate(heroes, DPS = Damage_per_sec)
+heroes1 <- rename(heroes, Damage_per_sec = `Damage per second`)
+heroes1 <- mutate(heroes1, DPS = Damage_per_sec)
 
 #On garde Bastion qui est une exception : il possède deux formes de base dans le jeu
-heroes <- mutate(heroes, Heroes = case_when(
+heroes1 <- mutate(heroes1, Heroes = case_when(
   Heroes == "Bastion Recon" ~ "Bastion_Recon",
   Heroes == "Bastion Turret" ~ "Bastion_Turret",
   TRUE ~ Heroes
 ))
 #supprimer tous les héros utilisant une capacité, ex : lucio soundwave
-heroes <- filter(heroes, !grepl(" ", Heroes))
-heroes <- arrange(heroes, desc(DPS))
+heroes1 <- filter(heroes1, !grepl(" ", Heroes))
+heroes1 <- arrange(heroes1, desc(DPS))
 
-top_10_heroes <- head(heroes, 10)
+top_10_heroes <- head(heroes1, 10)
 
 ggplot(top_10_heroes, aes(x = reorder(Heroes, -DPS), y = DPS, label = DPS)) +
   geom_bar(stat = "identity", fill = "orange") +
@@ -447,19 +447,45 @@ Observations : A l'exception de Zarya (Tank), et Zenyatta (Soin), nous retrouvon
 
 Pour répondre à cette question, nous nous appuierons sur les points de vie de chaque héros pour en faire un classement. On s'attend donc à retrouver presque exclusivement des tanks, puisque ce sont ceux qui sont censés être en première ligne, et avoir la capacité à encaisser le plus de dégâts.
 
+```{r}
+heroes2 <- filter(heroes, !grepl(" ", Heroes) | Heroes == "D.va Mech" | Heroes == "Roadhog" | Heroes =="Bastion Recon" | Heroes =="Bastion Turret", !is.na(Life))
+# Convertir la variable "Life" en entiers
+heroes2 <- mutate(heroes2, Life = as.integer(Life))
+
+heroes2 <- arrange(heroes2, desc(Life))
+top_10_heroes_life <- head(heroes2, 10)
+
+# Tracer le graphique de type bar chart pour "Life"
+ggplot(top_10_heroes_life, aes(x = reorder(Heroes, -Life), y =Life, label = Life)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  geom_text(position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
+  labs(title = "Top 10 héros avec le plus de DPS (Hors capacités)",
+       x = "Héros",
+       y = "Vie") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank(),
+        plot.background = element_blank())
+
+```
+On remarque que les tanks sont bien les personnages avec le plus de vie du jeu. Ils sont tous situés entre 400 et 600. La raison pour laquelle zarya n'ai que 400 points de vie, est qu'elle possède une capacité qui lui permet de se protéger de tous dégâts pendant quelques secondes. Après les tanks, viennent les dps qui possèdent le plus de points de vie.
+
 ## X) Quels sont les 10 héros avec le plus de soins par seconde?
 
 
 Pour répondre à cette question, nous nous appuierons sur la statistique de soins par seconde de chaque héro. On s'attend à retrouver tous les healers dans le classement.
 
 ```{r}
-heroes <- rename(heroes, Heal_per_sec = `Health per Sec`)
+heroes3 <- rename(heroes, Heal_per_sec = `Health per Sec`)
 
 # Calculer les Heal per seconds pour chaque héros
-heroes <- mutate(heroes, HPS = Heal_per_sec)
-heroes <- filter(heroes, !grepl(" ", Heroes) & HPS > 1)
-heroes <- arrange(heroes, desc(HPS))
-top_10_heroes_hps <- head(heroes, 10)
+heroes3 <- mutate(heroes3, HPS = Heal_per_sec)
+heroes3 <- filter(heroes3, !grepl(" ", Heroes) & HPS > 1 & Heroes != "Reaper" & Heroes != "Soldier")
+heroes3 <- arrange(heroes3, desc(HPS))
+top_10_heroes_hps <- head(heroes3, 10)
 
 ggplot(top_10_heroes_hps, aes(x = reorder(Heroes, -HPS), y = HPS, label = HPS)) +
   geom_bar(stat = "identity", fill = "green") +
@@ -476,6 +502,24 @@ ggplot(top_10_heroes_hps, aes(x = reorder(Heroes, -HPS), y = HPS, label = HPS)) 
         plot.background = element_blank())
 ```
 Comme attendu, tous les healers apparaissent. IL est bon de noter que dans le dataset que j'utilise, nous n'avons pas les héros les plus récents, c'est pour cette raison qu'il manque quelques personnages dans ce classement. On  note tout de même une énorme différence entre Ana et Lucio, cela s'explique par le fait que Ana ne peut healer qu'une personne à la fois, en lui tirant des seringues soignantes, tandis que lucio possède une zone de heal. Ce dernier a donc un moins gros heal par seconde, mais peut potentiellement soigner tous ses alliés en même temps si ils sont bien placés dans sa zone.
+
+## X) Est ce qu'il existe une corrélation entre les points de vie des personnages et les dégâts qu'ils infligent?
+
+On pourrait se demander si les personnages qui font le plus de dégâts sont ceux qui ont le moins de points de vie, et inversement. Cette hypothèse peut s'avérer crédible, puisqu"on pourrait se poser des questions sur l'équilibrage si les personnages les plus resistants sont également ceux qui font le plus mal. Nous allons donc essayer de répondre à cette question en faisant un scatterplot, et regarder si une tendance se dessine. Pour se faire, un point représente un personnage, en x, ses points de vie, et en y, ses dégâts.
+
+```{r}
+# Bug sur Zarya que je corrigerai donc je ne l'inclus pas pour l'instant, on garde seulement les formes normales des héros
+heroes4 <- filter(heroes, !grepl(" ", Heroes) | Heroes == "D.va Mech" | Heroes == "Roadhog" | Heroes =="Bastion Recon" | Heroes =="Bastion Turret", !is.na(Life))
+
+# Nuage de points pour les dégâts par seconde par rapport à la vie
+ggplot(heroes4, aes(x = Life, y = `Damage per second`)) +
+  geom_point(color = "blue", alpha = 0.6) +
+  labs(title = "Relation entre les points de vie et les dégâts de chaque héro",
+       x = "Points de vie",
+       y = "Dégâts par seconde") +
+  theme_minimal()
+```
+Les valeurs ne suivent aucune tendance. Il n'y a donc aucun rapport entre les points de vie et les dégâts par seconde. Cela peut s'expliquer par le fait qu'une des choses les plus importantes dans Overwatch, ce sont les capacités des héros. Ces dernières ne dépendent pas de leurs points de vies, ou de leur dégâts mais son propre à chacun selon les personnages et peuvent totalement changer l'issu d'un combat.
 
 ## X) Quelle est la distribution de la sensibilité des joueurs, et y a-t-il des tendances notables ?
 
