@@ -32,7 +32,7 @@ Reinhardt CALA,50,,50,75,,500,
 Reinhardt Pin,300,,300,450,,500,
 Roadhog Hook,30,,30,45,300,600,1
 Roadhog LM,225,450,225,337.5,,600,4
-Roadhog RM,100,200,50,150,,600,4
+Roadhog,100,200,50,150,,600,4
 Soldier,200,400,20,,40,200,25
 Soldier Helix,120,,120,,,200,1
 Sombra,160,320,8,,,200,60
@@ -49,7 +49,7 @@ Tracer,240,480,6,,,150,40
 Widowmaker Burst,130,260,13,,,200,30
 Widowmaker Snip,120,300,120,,,200,10
 Widowmaker Venom,15,,75,,,,1
-Winston,54,,,81,,500/1000,100
+Winston,54,,,81,,500,100
 Winston Salto,50,,50,75,,500/1000,1
 Zarya,92,,92,,,400,4
 Zarya,160,,,,,400,100
