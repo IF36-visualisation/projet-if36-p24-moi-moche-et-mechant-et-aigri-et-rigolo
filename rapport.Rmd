@@ -438,10 +438,44 @@ ggplot(top_10_heroes, aes(x = reorder(Heroes, -DPS), y = DPS, label = DPS)) +
         plot.background = element_blank())
 
 
+
 ```
 
 Observations : A l'exception de Zarya (Tank), et Zenyatta (Soin), nous retrouvons 8 héros de type Dégât dans le top 10, voilà qui confirme nos suppositions. On remarque par contre qu'un héro réalise beaucoup plus de DPS que n'importe quel autre. On pourrait, à première vue, penser que le jeu n'est pas bien équilibré, mais cela s'explique par le fait que Bastion possède deux formes, dont la forme tourelle (Bastion Turret), qui fait de lui une tourelle, assez large et immobile qui tire avec une énorme cadence. Certe le personnage fait beaucoup de dégâts par seconde, mais il est gros et très facilement touchable en contrepartie.
 
+## X) Quels sont les 10 héros qui ont le plus de point de vie?
+
+Pour répondre à cette question, nous nous appuierons sur les points de vie de chaque héros pour en faire un classement. On s'attend donc à retrouver presque exclusivement des tanks, puisque ce sont ceux qui sont censés être en première ligne, et avoir la capacité à encaisser le plus de dégâts.
+
+## X) Quels sont les 10 héros avec le plus de soins par seconde?
+
+
+Pour répondre à cette question, nous nous appuierons sur la statistique de soins par seconde de chaque héro. On s'attend à retrouver tous les healers dans le classement.
+
+```{r}
+heroes <- rename(heroes, Heal_per_sec = `Health per Sec`)
+
+# Calculer les Heal per seconds pour chaque héros
+heroes <- mutate(heroes, HPS = Heal_per_sec)
+heroes <- filter(heroes, !grepl(" ", Heroes) & HPS > 1)
+heroes <- arrange(heroes, desc(HPS))
+top_10_heroes_hps <- head(heroes, 10)
+
+ggplot(top_10_heroes_hps, aes(x = reorder(Heroes, -HPS), y = HPS, label = HPS)) +
+  geom_bar(stat = "identity", fill = "green") +
+  geom_text(position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
+  labs(title = "Top 10 héros avec le plus de Heal per seconds (Hors capacités)",
+       x = "Héros",
+       y = "Heal per second") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank(),
+        plot.background = element_blank())
+```
+Comme attendu, tous les healers apparaissent. IL est bon de noter que dans le dataset que j'utilise, nous n'avons pas les héros les plus récents, c'est pour cette raison qu'il manque quelques personnages dans ce classement. On  note tout de même une énorme différence entre Ana et Lucio, cela s'explique par le fait que Ana ne peut healer qu'une personne à la fois, en lui tirant des seringues soignantes, tandis que lucio possède une zone de heal. Ce dernier a donc un moins gros heal par seconde, mais peut potentiellement soigner tous ses alliés en même temps si ils sont bien placés dans sa zone.
 
 ## X) Quelle est la distribution de la sensibilité des joueurs, et y a-t-il des tendances notables ?
 
