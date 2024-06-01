@@ -199,6 +199,7 @@ datas2 <- read_csv("./data/ow2_season_02_FINAL_heroes_stats__2023-05-06.csv")
 datas3 <- read_csv("./data/ow2_season_03_FINAL_heroes_stats__2023-05-06.csv")
 datas4 <- read_csv("./data/ow2_season_04_FINAL_heroes_stats__2023-06-27.csv")
 players <- read_csv("./data/highest_earning_players.csv")
+team_data <- read_csv("./data/highest_earning_teams.csv")
 country_codes <- read_csv("./data/country-and-continent-codes-list.csv")
 heroes <-  read_csv("./data/Overwatch_edopic.csv")
 ```
