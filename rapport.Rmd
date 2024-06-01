@@ -708,31 +708,114 @@ ggplot(map_data, aes(x = long, y = lat, group = group, fill = TotalUSDPrize/1000
   theme_minimal()
 ```
 
+Observations : On peut observer que les gains moyens des joueurs d'Overwatch varient considérablement en fonction de leur nationalité. Les États-Unis, la Corée du Sud et la Chine sont les pays avec les gains moyens les plus élevés, tandis que les pays européens et sud-américains ont des gains moyens plus bas. Cela peut refléter les différences dans les infrastructures de l'e-sport, les opportunités de tournois et le soutien financier pour les joueurs professionnels dans ces pays.
+
+
 ```{r}
-overwatch_players <- players[players$Game == "Overwatch", ]
-players$CountryCode <- tolower(overwatch_players$CountryCode)
-country_codes$Country_Name <- sub(",.*", "", country_codes$Country_Name)
+overwatch_team_data <- team_data[team_data$Game == "Overwatch", ]
 
-head(country_codes$Country_Name)
-country_codes$Two_Letter_Country_Code <- tolower(country_codes$Two_Letter_Country_Code)
+# Ajouter une nouvelle colonne pour les gains moyens par tournoi directement
+overwatch_team_data$AverageEarningsPerTournament <- overwatch_team_data$TotalUSDPrize / overwatch_team_data$TotalTournaments
 
-merged_data <- merge(players, country_codes, by.x = "CountryCode", by.y = "Two_Letter_Country_Code", all.x = TRUE)
+# Filtrer pour obtenir uniquement les 20 équipes avec les gains moyens les plus élevés
+top_teams <- overwatch_team_data %>%
+  arrange(desc(AverageEarningsPerTournament)) %>%
+  top_n(20, AverageEarningsPerTournament)
 
-average_earnings <- aggregate(TotalUSDPrize ~ Country_Name, data = merged_data, FUN = mean, na.rm = TRUE)
-average_earnings <- average_earnings[order(-average_earnings$TotalUSDPrize),]
-
-
-barplot(average_earnings$TotalUSDPrize / 1000,
-        names.arg = average_earnings$Country_Name,
-        las = 1,
-        main = "Moyenne des Gains par Nationalité des Joueurs d'Overwatch",
-        xlab = "Gains Moyens (en milliers de USD)",
-        col = "blue",
-        horiz = TRUE,
-        space = 0.8,
-        xlim = c(0, max(average_earnings$TotalUSDPrize / 1000) + 100),
-        ylim = c(0, 25),
-        cex.names = 1)
+# Créer un graphique en barres pour afficher les gains moyens par tournoi de ces équipes
+ggplot(top_teams, aes(x=reorder(TeamName, AverageEarningsPerTournament), y=AverageEarningsPerTournament/1000, fill=TeamName)) +
+  geom_col(show.legend = FALSE) +
+  geom_text(aes(label=round(AverageEarningsPerTournament/1000, 2)), vjust=-0.3, size=3.5, color="black") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle=45, hjust=1, size=12), axis.title.x=element_text(size=14), axis.title.y=element_text(size=14)) +
+  labs(title="Top 20 des Équipes Overwatch par Gains Moyens par Tournoi", x="Équipe", y="Gains Moyens par Tournoi en milliers USD")
 ```
 
-Observations : On peut observer que les gains moyens des joueurs d'Overwatch varient considérablement en fonction de leur nationalité. Les États-Unis, la Corée du Sud et la Chine sont les pays avec les gains moyens les plus élevés, tandis que les pays européens et sud-américains ont des gains moyens plus bas. Cela peut refléter les différences dans les infrastructures de l'e-sport, les opportunités de tournois et le soutien financier pour les joueurs professionnels dans ces pays.
+```{r}
+
+# Filtrer les données pour les joueurs d'Overwatch
+overwatch_players <- players[players$Game == "Overwatch", ]
+overwatch_players$CountryCode <- tolower(overwatch_players$CountryCode)
+
+# Nettoyer les noms des pays dans la table des codes de pays
+country_codes$Country_Name <- sub(",.*", "", country_codes$Country_Name)
+country_codes$Two_Letter_Country_Code <- tolower(country_codes$Two_Letter_Country_Code)
+
+# Joindre les données des joueurs avec les codes de pays pour obtenir les noms complets des pays
+overwatch_players <- overwatch_players %>%
+  left_join(country_codes, by = c("CountryCode" = "Two_Letter_Country_Code"))
+
+# Calculer les nationalités des joueurs les mieux payés dans Overwatch
+top_players_by_earnings <- overwatch_players %>%
+  arrange(desc(TotalUSDPrize)) %>%
+  slice_head(n = 100) %>%
+  count(Country_Name, sort = TRUE)  # Trier par le nombre de joueurs par nationalité
+
+# Créer un graphique en barres pour visualiser les données
+ggplot(top_players_by_earnings, aes(x = reorder(Country_Name, n), y = n)) +
+  geom_col(fill = "steelblue", show.legend = FALSE) +  # Utilisation d'une couleur unique et désactivation de la légende
+  labs(title = "Nationalités des 100 Joueurs d'Overwatch les Mieux Payés",
+       x = "Pays",
+       y = "Nombre de Joueurs") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+```
+```{r}
+overwatch_players <- players[players$Game == "Overwatch", ]
+
+# Jointure des données des joueurs d'Overwatch avec les données de rôles basée sur les handles correspondants
+full_data <- left_join(overwatch_players, player_data, by = c("CurrentHandle" = "Player"))
+
+# Suppression des joueurs sans rôle spécifié
+full_data <- full_data %>%
+  filter(!is.na(Role) & Role != "")  # Assurez-vous que le rôle n'est ni NA ni une chaîne vide
+
+# Filtration pour obtenir les 100 joueurs les mieux rémunérés
+top_players_by_earnings <- full_data %>%
+  arrange(desc(TotalUSDPrize)) %>%
+  slice_head(n = 100)
+
+# Calcul des gains moyens par rôle parmi ces 100 joueurs
+earnings_by_role <- top_players_by_earnings %>%
+  group_by(Role) %>%
+  summarize(AverageEarnings = mean(TotalUSDPrize), .groups = 'drop')
+
+# Création d'un graphique en barres pour visualiser les gains moyens par rôle
+ggplot(earnings_by_role, aes(x = Role, y = AverageEarnings, fill = Role)) +
+  geom_col(show.legend = FALSE) +
+  labs(title = "Gains moyens par rôle parmi les 100 meilleurs joueurs", x = "Rôle", y = "Gains moyens (USD)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+```{r}
+overwatch_players <- players[players$Game == "Overwatch", ]
+
+# Jointure des données des joueurs d'Overwatch avec les données de rôles basée sur les handles correspondants
+full_data <- left_join(overwatch_players, player_data, by = c("CurrentHandle" = "Player"))
+
+# Suppression des joueurs sans rôle ou héros spécifié
+full_data <- full_data %>%
+  filter(!is.na(Role) & Role != "" & !is.na(Hero) & Hero != "")  # Assurez-vous que le rôle et le héros ne sont ni NA ni une chaîne vide
+
+# Filtration pour obtenir les 100 joueurs les mieux rémunérés
+top_players_by_earnings <- full_data %>%
+  arrange(desc(TotalUSDPrize)) %>%
+  slice_head(n = 100)
+
+# Calcul des gains moyens par rôle et héros parmi ces 100 joueurs
+earnings_by_role_and_hero <- top_players_by_earnings %>%
+  group_by(Role, Hero) %>%
+  summarize(AverageEarnings = mean(TotalUSDPrize), .groups = 'drop') %>%
+  arrange(desc(AverageEarnings))
+
+# Création d'un graphique en barres pour visualiser les gains moyens par rôle et héros
+ggplot(earnings_by_role_and_hero, aes(x = Hero, y = AverageEarnings, fill = Hero)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~Role, scales = "free_x") +
+  labs(title = "Gains moyens par Héros et Rôle parmi les 100 meilleurs joueurs", x = "Héros", y = "Gains moyens (USD)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 65, hjust = 1, size = 8))  # Combinaison des ajustements dans une seule instruction
+
+```
+
