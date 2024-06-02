@@ -491,7 +491,7 @@ top_10_heroes_hps <- head(heroes3, 10)
 ggplot(top_10_heroes_hps, aes(x = reorder(Heroes, -HPS), y = HPS, label = HPS)) +
   geom_bar(stat = "identity", fill = "green") +
   geom_text(position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
-  labs(title = "Top 10 héros avec le plus de soins par seconde",
+  labs(title = "Top héros avec le plus de soins par seconde",
        x = "Héros",
        y = "Soins par seconde") +
   theme_minimal() +
@@ -554,7 +554,7 @@ ggplot(merged_data, aes(x = Pick_Rate, y = Heal_per_sec, color = Heroes)) +
   theme(legend.position = "right") +  # Positionnement de la légende sur la droite
   scale_color_manual(values = colors)  # Utilisation des couleurs définies précédemment
 ```
-Une fois encore, nous ne trouvons pas réellement de tendance. Nous pouvons tout de même noter que Ana et Mercy sont les héros qui font le plus de soins, et sont les deux les plus utilisés. Zenyatta, qui heal plus que Lucio se retrouve quand même au dessus, sûrement parce que zen ne peut healer qu'une personne à la fois, tandis que lucio peut ditribuer du soin à plusieurs alliés à la fois. Pour Mercy, cela peut être dû au fait que cette dernière peut utiliser une de ces capacité pour réanimer des alliés.
+Le taux de sélection correspond à tous héros confondus, le teux de personnes qui prennent X personnage. Une fois encore, nous ne trouvons pas réellement de tendance. Nous pouvons tout de même noter que Ana et Mercy sont les héros qui font le plus de soins, et sont les deux les plus utilisés. Bien que Zenyatta heal plus que Lucio, ce dernier se retrouve quand même au dessus, sûrement parce que zen ne peut healer qu'une personne à la fois, tandis que lucio peut ditribuer du soin à plusieurs alliés à la fois. Pour Mercy, cela peut être dû au fait que cette dernière peut utiliser une de ces capacité pour réanimer des alliés.
 
 ## X) Quelle est la distribution de la sensibilité des joueurs, et y a-t-il des tendances notables ?
 
