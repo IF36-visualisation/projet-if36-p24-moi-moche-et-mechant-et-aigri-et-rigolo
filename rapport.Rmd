@@ -199,7 +199,6 @@ datas2 <- read_csv("./data/ow2_season_02_FINAL_heroes_stats__2023-05-06.csv")
 datas3 <- read_csv("./data/ow2_season_03_FINAL_heroes_stats__2023-05-06.csv")
 datas4 <- read_csv("./data/ow2_season_04_FINAL_heroes_stats__2023-06-27.csv")
 players <- read_csv("./data/highest_earning_players.csv")
-team_data <- read_csv("./data/highest_earning_teams.csv")
 country_codes <- read_csv("./data/country-and-continent-codes-list.csv")
 heroes <-  read_csv("./data/Overwatch_edopic.csv")
 ```
@@ -427,7 +426,7 @@ top_10_heroes <- head(heroes1, 10)
 ggplot(top_10_heroes, aes(x = reorder(Heroes, -DPS), y = DPS, label = DPS)) +
   geom_bar(stat = "identity", fill = "orange") +
   geom_text(position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
-  labs(title = "Top 10 héros avec le plus de dégâts par seconde",
+  labs(title = "Top 10 héros avec le plus de DPS (Hors capacités)",
        x = "Héros",
        y = "DPS") +
   theme_minimal() +
@@ -460,7 +459,7 @@ top_10_heroes_life <- head(heroes2, 10)
 ggplot(top_10_heroes_life, aes(x = reorder(Heroes, -Life), y =Life, label = Life)) +
   geom_bar(stat = "identity", fill = "blue") +
   geom_text(position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
-  labs(title = "Top 10 héros avec le plus de points de vie",
+  labs(title = "Top 10 héros avec le plus de DPS (Hors capacités)",
        x = "Héros",
        y = "Vie") +
   theme_minimal() +
@@ -474,7 +473,7 @@ ggplot(top_10_heroes_life, aes(x = reorder(Heroes, -Life), y =Life, label = Life
 ```
 On remarque que les tanks sont bien les personnages avec le plus de vie du jeu. Ils sont tous situés entre 400 et 600. La raison pour laquelle zarya n'ai que 400 points de vie, est qu'elle possède une capacité qui lui permet de se protéger de tous dégâts pendant quelques secondes. Après les tanks, viennent les dps qui possèdent le plus de points de vie.
 
-## X) Quels sont les héros avec le plus de soins par seconde?
+## X) Quels sont les 10 héros avec le plus de soins par seconde?
 
 
 Pour répondre à cette question, nous nous appuierons sur la statistique de soins par seconde de chaque héro. On s'attend à retrouver tous les healers dans le classement.
@@ -491,9 +490,13 @@ top_10_heroes_hps <- head(heroes3, 10)
 ggplot(top_10_heroes_hps, aes(x = reorder(Heroes, -HPS), y = HPS, label = HPS)) +
   geom_bar(stat = "identity", fill = "green") +
   geom_text(position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
+<<<<<<< HEAD
   labs(title = "Top héros avec le plus de soins par seconde",
+=======
+  labs(title = "Top 10 héros avec le plus de Heal per seconds (Hors capacités)",
+>>>>>>> bd2f623c430c56b9db4573337b2ca248dd8a626d
        x = "Héros",
-       y = "Soins par seconde") +
+       y = "Heal per second") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         panel.grid.major = element_blank(),
@@ -522,6 +525,7 @@ ggplot(heroes4, aes(x = Life, y = `Damage per second`)) +
 ```
 Les valeurs ne suivent aucune tendance. Il n'y a donc aucun rapport entre les points de vie et les dégâts par seconde. Cela peut s'expliquer par le fait qu'une des choses les plus importantes dans Overwatch, ce sont les capacités des héros. Ces dernières ne dépendent pas de leurs points de vies, ou de leur dégâts mais son propre à chacun selon les personnages et peuvent totalement changer l'issu d'un combat.
 
+<<<<<<< HEAD
 ## X) Est ce que les healers avec le plus de soin par seconde sont ceux qui sont le plus joués ? 
 
 Nous avions vu dans le graphique X (insérer le numéro de la question) les héros les plus joués. Il serait donc intéressant de vérifier si les healers qui prodiguent le plus de soins par seconde sont ceux qui sont aussi les plus plus utilisés. Pour ce faire, nous allons prendre les 2 datasets nécessaire: celui qui contient la feature PickRate et celui qui contient les stats de soins par seconde. Nous ne garderons que les 4 healers présents dans le dataset utilisé dans les 3 graphiques précédents. Après avoir trié, et fusionner, on se retrouvera avec un seul dataset. Il restera un seul problème: dans le jeu de données contenant la valeur Pick Rate, chaque héro est cité plusieurs fois, car son taux d'utilisation diffère selon l'élo dans lequel il est joué (bronze, argent, or etc..) J'ai donc choisi de faire la moyenne de ce taux, pôur avoir un aperçu global. Une fois la dataset fusionné, avec les bons héros et un seul Pick Rate à chaque fois, nous pourrons créer un nuage de points pour déceler une tendance ou non.
@@ -556,6 +560,8 @@ ggplot(merged_data, aes(x = Pick_Rate, y = Heal_per_sec, color = Heroes)) +
 ```
 Le taux de sélection correspond à tous héros confondus, le teux de personnes qui prennent X personnage. Une fois encore, nous ne trouvons pas réellement de tendance. Nous pouvons tout de même noter que Ana et Mercy sont les héros qui font le plus de soins, et sont les deux les plus utilisés. Bien que Zenyatta heal plus que Lucio, ce dernier se retrouve quand même au dessus, sûrement parce que zen ne peut healer qu'une personne à la fois, tandis que lucio peut ditribuer du soin à plusieurs alliés à la fois. Pour Mercy, cela peut être dû au fait que cette dernière peut utiliser une de ces capacité pour réanimer des alliés.
 
+=======
+>>>>>>> bd2f623c430c56b9db4573337b2ca248dd8a626d
 ## X) Quelle est la distribution de la sensibilité des joueurs, et y a-t-il des tendances notables ?
 
 On s'attend à ce que les joueurs aient globalement une sensibilité similaire. Mais il y a toujours des joueurs qui ont des façons de jouer différentes que ce soit l'inclinaison du clavier ou encore la façon de tenir la souris donc ça ne nous étonnerait pas s'il y a quelques joueurs qui sortent du lot.
@@ -568,8 +574,7 @@ player_data$DPI <- as.numeric(player_data$DPI)
 
 player_data <- player_data %>% 
   mutate(ratio_sensibilite = Sensitivity / DPI,
-         sensibilite_standardisee = ratio_sensibilit
-         e * dpi_reference)
+         sensibilite_standardisee = ratio_sensibilite * dpi_reference)
 
 max_count <- max(ggplot_build(ggplot(player_data, aes(x = sensibilite_standardisee)) +
                                 geom_histogram(binwidth = 2))$data[[1]]$count)
@@ -743,114 +748,31 @@ ggplot(map_data, aes(x = long, y = lat, group = group, fill = TotalUSDPrize/1000
   theme_minimal()
 ```
 
-Observations : On peut observer que les gains moyens des joueurs d'Overwatch varient considérablement en fonction de leur nationalité. Les États-Unis, la Corée du Sud et la Chine sont les pays avec les gains moyens les plus élevés, tandis que les pays européens et sud-américains ont des gains moyens plus bas. Cela peut refléter les différences dans les infrastructures de l'e-sport, les opportunités de tournois et le soutien financier pour les joueurs professionnels dans ces pays.
-
-
 ```{r}
-overwatch_team_data <- team_data[team_data$Game == "Overwatch", ]
-
-# Ajouter une nouvelle colonne pour les gains moyens par tournoi directement
-overwatch_team_data$AverageEarningsPerTournament <- overwatch_team_data$TotalUSDPrize / overwatch_team_data$TotalTournaments
-
-# Filtrer pour obtenir uniquement les 20 équipes avec les gains moyens les plus élevés
-top_teams <- overwatch_team_data %>%
-  arrange(desc(AverageEarningsPerTournament)) %>%
-  top_n(20, AverageEarningsPerTournament)
-
-# Créer un graphique en barres pour afficher les gains moyens par tournoi de ces équipes
-ggplot(top_teams, aes(x=reorder(TeamName, AverageEarningsPerTournament), y=AverageEarningsPerTournament/1000, fill=TeamName)) +
-  geom_col(show.legend = FALSE) +
-  geom_text(aes(label=round(AverageEarningsPerTournament/1000, 2)), vjust=-0.3, size=3.5, color="black") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle=45, hjust=1, size=12), axis.title.x=element_text(size=14), axis.title.y=element_text(size=14)) +
-  labs(title="Top 20 des Équipes Overwatch par Gains Moyens par Tournoi", x="Équipe", y="Gains Moyens par Tournoi en milliers USD")
-```
-
-```{r}
-
-# Filtrer les données pour les joueurs d'Overwatch
 overwatch_players <- players[players$Game == "Overwatch", ]
-overwatch_players$CountryCode <- tolower(overwatch_players$CountryCode)
-
-# Nettoyer les noms des pays dans la table des codes de pays
+players$CountryCode <- tolower(overwatch_players$CountryCode)
 country_codes$Country_Name <- sub(",.*", "", country_codes$Country_Name)
+
+head(country_codes$Country_Name)
 country_codes$Two_Letter_Country_Code <- tolower(country_codes$Two_Letter_Country_Code)
 
-# Joindre les données des joueurs avec les codes de pays pour obtenir les noms complets des pays
-overwatch_players <- overwatch_players %>%
-  left_join(country_codes, by = c("CountryCode" = "Two_Letter_Country_Code"))
+merged_data <- merge(players, country_codes, by.x = "CountryCode", by.y = "Two_Letter_Country_Code", all.x = TRUE)
 
-# Calculer les nationalités des joueurs les mieux payés dans Overwatch
-top_players_by_earnings <- overwatch_players %>%
-  arrange(desc(TotalUSDPrize)) %>%
-  slice_head(n = 100) %>%
-  count(Country_Name, sort = TRUE)  # Trier par le nombre de joueurs par nationalité
+average_earnings <- aggregate(TotalUSDPrize ~ Country_Name, data = merged_data, FUN = mean, na.rm = TRUE)
+average_earnings <- average_earnings[order(-average_earnings$TotalUSDPrize),]
 
-# Créer un graphique en barres pour visualiser les données
-ggplot(top_players_by_earnings, aes(x = reorder(Country_Name, n), y = n)) +
-  geom_col(fill = "steelblue", show.legend = FALSE) +  # Utilisation d'une couleur unique et désactivation de la légende
-  labs(title = "Nationalités des 100 Joueurs d'Overwatch les Mieux Payés",
-       x = "Pays",
-       y = "Nombre de Joueurs") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
-```
-```{r}
-overwatch_players <- players[players$Game == "Overwatch", ]
 
-# Jointure des données des joueurs d'Overwatch avec les données de rôles basée sur les handles correspondants
-full_data <- left_join(overwatch_players, player_data, by = c("CurrentHandle" = "Player"))
-
-# Suppression des joueurs sans rôle spécifié
-full_data <- full_data %>%
-  filter(!is.na(Role) & Role != "")  # Assurez-vous que le rôle n'est ni NA ni une chaîne vide
-
-# Filtration pour obtenir les 100 joueurs les mieux rémunérés
-top_players_by_earnings <- full_data %>%
-  arrange(desc(TotalUSDPrize)) %>%
-  slice_head(n = 100)
-
-# Calcul des gains moyens par rôle parmi ces 100 joueurs
-earnings_by_role <- top_players_by_earnings %>%
-  group_by(Role) %>%
-  summarize(AverageEarnings = mean(TotalUSDPrize), .groups = 'drop')
-
-# Création d'un graphique en barres pour visualiser les gains moyens par rôle
-ggplot(earnings_by_role, aes(x = Role, y = AverageEarnings, fill = Role)) +
-  geom_col(show.legend = FALSE) +
-  labs(title = "Gains moyens par rôle parmi les 100 meilleurs joueurs", x = "Rôle", y = "Gains moyens (USD)") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-```
-```{r}
-overwatch_players <- players[players$Game == "Overwatch", ]
-
-# Jointure des données des joueurs d'Overwatch avec les données de rôles basée sur les handles correspondants
-full_data <- left_join(overwatch_players, player_data, by = c("CurrentHandle" = "Player"))
-
-# Suppression des joueurs sans rôle ou héros spécifié
-full_data <- full_data %>%
-  filter(!is.na(Role) & Role != "" & !is.na(Hero) & Hero != "")  # Assurez-vous que le rôle et le héros ne sont ni NA ni une chaîne vide
-
-# Filtration pour obtenir les 100 joueurs les mieux rémunérés
-top_players_by_earnings <- full_data %>%
-  arrange(desc(TotalUSDPrize)) %>%
-  slice_head(n = 100)
-
-# Calcul des gains moyens par rôle et héros parmi ces 100 joueurs
-earnings_by_role_and_hero <- top_players_by_earnings %>%
-  group_by(Role, Hero) %>%
-  summarize(AverageEarnings = mean(TotalUSDPrize), .groups = 'drop') %>%
-  arrange(desc(AverageEarnings))
-
-# Création d'un graphique en barres pour visualiser les gains moyens par rôle et héros
-ggplot(earnings_by_role_and_hero, aes(x = Hero, y = AverageEarnings, fill = Hero)) +
-  geom_col(show.legend = FALSE) +
-  facet_wrap(~Role, scales = "free_x") +
-  labs(title = "Gains moyens par Héros et Rôle parmi les 100 meilleurs joueurs", x = "Héros", y = "Gains moyens (USD)") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 65, hjust = 1, size = 8))  # Combinaison des ajustements dans une seule instruction
-
+barplot(average_earnings$TotalUSDPrize / 1000,
+        names.arg = average_earnings$Country_Name,
+        las = 1,
+        main = "Moyenne des Gains par Nationalité des Joueurs d'Overwatch",
+        xlab = "Gains Moyens (en milliers de USD)",
+        col = "blue",
+        horiz = TRUE,
+        space = 0.8,
+        xlim = c(0, max(average_earnings$TotalUSDPrize / 1000) + 100),
+        ylim = c(0, 25),
+        cex.names = 1)
 ```
 
+Observations : On peut observer que les gains moyens des joueurs d'Overwatch varient considérablement en fonction de leur nationalité. Les États-Unis, la Corée du Sud et la Chine sont les pays avec les gains moyens les plus élevés, tandis que les pays européens et sud-américains ont des gains moyens plus bas. Cela peut refléter les différences dans les infrastructures de l'e-sport, les opportunités de tournois et le soutien financier pour les joueurs professionnels dans ces pays.
