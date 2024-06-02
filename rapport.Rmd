@@ -533,7 +533,8 @@ player_data$DPI <- as.numeric(player_data$DPI)
 
 player_data <- player_data %>% 
   mutate(ratio_sensibilite = Sensitivity / DPI,
-         sensibilite_standardisee = ratio_sensibilite * dpi_reference)
+         sensibilite_standardisee = ratio_sensibilit
+         e * dpi_reference)
 
 max_count <- max(ggplot_build(ggplot(player_data, aes(x = sensibilite_standardisee)) +
                                 geom_histogram(binwidth = 2))$data[[1]]$count)
