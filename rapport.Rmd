@@ -522,6 +522,40 @@ ggplot(heroes4, aes(x = Life, y = `Damage per second`)) +
 ```
 Les valeurs ne suivent aucune tendance. Il n'y a donc aucun rapport entre les points de vie et les dégâts par seconde. Cela peut s'expliquer par le fait qu'une des choses les plus importantes dans Overwatch, ce sont les capacités des héros. Ces dernières ne dépendent pas de leurs points de vies, ou de leur dégâts mais son propre à chacun selon les personnages et peuvent totalement changer l'issu d'un combat.
 
+## X) Est ce que les healers avec le plus de soin par seconde sont ceux qui sont le plus joués ? 
+
+Nous avions vu dans le graphique X (insérer le numéro de la question) les héros les plus joués. Il serait donc intéressant de vérifier si les healers qui prodiguent le plus de soins par seconde sont ceux qui sont aussi les plus plus utilisés. Pour ce faire, nous allons prendre les 2 datasets nécessaire: celui qui contient la feature PickRate et celui qui contient les stats de soins par seconde. Nous ne garderons que les 4 healers présents dans le dataset utilisé dans les 3 graphiques précédents. Après avoir trié, et fusionner, on se retrouvera avec un seul dataset. Il restera un seul problème: dans le jeu de données contenant la valeur Pick Rate, chaque héro est cité plusieurs fois, car son taux d'utilisation diffère selon l'élo dans lequel il est joué (bronze, argent, or etc..) J'ai donc choisi de faire la moyenne de ce taux, pôur avoir un aperçu global. Une fois la dataset fusionné, avec les bons héros et un seul Pick Rate à chaque fois, nous pourrons créer un nuage de points pour déceler une tendance ou non.
+
+```{r}
+# Renommer les colonnes pour une utilisation plus simple
+heroes5 <- rename(heroes, Heal_per_sec = `Health per Sec`)
+data2 <- rename(data, Pick_Rate = `Pick Rate, %`)
+
+# Filtrer les healers spécifiques : Ana, Mercy, Zenyatta et Lucio dans le dataset 'heroes'
+selected_healers <- filter(heroes5, Heroes %in% c("Ana", "Mercy", "Zenyatta", "Lucio"))
+
+# Agréger les données du dataset 'data' pour obtenir une moyenne de 'Pick Rate' par personnage
+average_pick_rate <- data2 %>%
+  filter(Hero %in% c("Ana", "Mercy", "Zenyatta", "Lucio")) %>%
+  group_by(Hero) %>%
+  summarise(Pick_Rate = mean(Pick_Rate))
+
+# Fusionner les deux datasets par les noms des héros
+merged_data <- merge(selected_healers, average_pick_rate, by.x = "Heroes", by.y = "Hero")
+
+colors <- c("Ana" = "blue", "Mercy" = "orange", "Zenyatta" = "purple", "Lucio" = "green")
+
+ggplot(merged_data, aes(x = Pick_Rate, y = Heal_per_sec, color = Heroes)) +
+  geom_point(size = 3) +
+  labs(title = "Relation entre le taux de sélection et les soins par seconde pour les healers",
+       x = "Taux de sélection (%)",
+       y = "Soins par seconde (HPS)") +
+  theme_minimal() +
+  theme(legend.position = "right") +  # Positionnement de la légende sur la droite
+  scale_color_manual(values = colors)  # Utilisation des couleurs définies précédemment
+```
+Une fois encore, nous ne trouvons pas réellement de tendance. Nous pouvons tout de même noter que Ana et Mercy sont les héros qui font le plus de soins, et sont les deux les plus utilisés. Zenyatta, qui heal plus que Lucio se retrouve quand même au dessus, sûrement parce que zen ne peut healer qu'une personne à la fois, tandis que lucio peut ditribuer du soin à plusieurs alliés à la fois. Pour Mercy, cela peut être dû au fait que cette dernière peut utiliser une de ces capacité pour réanimer des alliés.
+
 ## X) Quelle est la distribution de la sensibilité des joueurs, et y a-t-il des tendances notables ?
 
 On s'attend à ce que les joueurs aient globalement une sensibilité similaire. Mais il y a toujours des joueurs qui ont des façons de jouer différentes que ce soit l'inclinaison du clavier ou encore la façon de tenir la souris donc ça ne nous étonnerait pas s'il y a quelques joueurs qui sortent du lot.
