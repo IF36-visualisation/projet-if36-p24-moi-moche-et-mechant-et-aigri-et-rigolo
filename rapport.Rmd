@@ -604,25 +604,37 @@ On peut effectivement s'attendre à ce que les mêmes rôles partagent globaleme
 
 ```{r}
 
-dpi_reference <- 800
+library(ggplot2)
+library(dplyr)
 
 player_data$Sensitivity <- as.numeric(player_data$Sensitivity)
 player_data$DPI <- as.numeric(player_data$DPI)
 
+dpi_reference <- 800
 player_data <- player_data %>% 
   mutate(ratio_sensibilite = Sensitivity / DPI,
          sensibilite_standardisee = ratio_sensibilite * dpi_reference)
 
-damage_data <- player_data %>% filter(Role == "Damage")
-tank_data <- player_data %>% filter(Role == "Tank")
-support_data <- player_data %>% filter(Role == "Support")
+AverageSensibility <- player_data %>%
+  group_by(Role) %>%
+  summarize(AverageSensibility = mean(sensibilite_standardisee))
+
 ggplot(player_data, aes(x = Role, y = sensibilite_standardisee, fill = Role)) +
-  geom_violin() +
+  geom_violin(trim = FALSE) +
   labs(title = "Distribution des sensibilités par rôle",
        x = "Rôle", y = "Sensibilités") +
-  theme_minimal()
-```
+  theme_minimal() +
+  theme(legend.position = "none",
+        panel.grid.major = element_blank(),
+        axis.line = element_line(color = "black"),
+        axis.text = element_text(size = 12, color = "black"),
+        axis.title = element_text(size = 14, color = "black"),
+        plot.title = element_text(size = 16, hjust = 0.5, color = "black")) +
+  geom_point(data = AverageSensibility, aes(x = Role, y = AverageSensibility), color = "black", size = 2.5) + 
+  geom_text(data = AverageSensibility, aes(x = Role, y = AverageSensibility, label = round(AverageSensibility, 1)), vjust = -0.8, size = 3.5, color = "black", fontface = "bold") +
+  scale_fill_manual(values = c("#66c2a5", "#fc8d62", "#8da0cb"))
 
+```
 
 Pour le rôle Damage, les sensibilités sont étendues mais reste tout de même entre 2 et 8-9. Il y a un ou deux joueurs qui ont une sensibilité vraiment différente et bien plus élevée.
 
@@ -632,29 +644,16 @@ Et pour le rôle Tank, elles sont aussi relativement étendues allant de 2 à 15
 
 Pour conclure les joueurs qui jouent le même rôle n'ont pas forcément la même sensibilité car on peut observer une large gamme dans les trois rôles. On observe quand même une sensibilité avec une fréquence élevée pour les rôles Support et Tank à 4 et 6 respectivement.
 
-## X) Est ce que les joueurs damage ont une plus grosse sensibilité afin de pouvoir mettre des flicks ?
-
+Nous avons également ajouté la moyenne des sensibilités sur le graphique plutôt que d'en faire un à part entière. 
 On peut s'attendre à ce que les joueurs damage aient une plus sensibilité car ils sont au coeur du combat et pourraient avoir besoin de se retourner plus souvent par exemple.
 
-```{r}
-mean_data <- aggregate(sensibilite_standardisee ~ Role, data = player_data, FUN = mean)
-
-# Graphique à barres des moyennes de sensibilité par rôle
-ggplot(mean_data, aes(x = Role, y = sensibilite_standardisee, fill = Role)) +
-  geom_bar(stat = "identity") +
-  labs(title = "Moyenne des sensibilités par rôle",
-       x = "Rôle", y = "Moyenne des sensibilités") +
-  theme_minimal()
-```
-Ce graphique est à la suite du précédent car on voyait clairement la distribution des sensibilités mais on ne voyait pas en moyenne qui avait la plus grosse sensibilité.
-
-Mais nos attentes étaient donc fausses, c'est le rôle Tank qui a en moyenne une plus grosse sensibilité. 
+Nos attentes étaient donc fausses, c'est le rôle Tank qui a en moyenne une plus grosse sensibilité. 
 Le rôle Damage a carrément une plus petite sensibilité que le rôle Support.
 On ne sait pas vraiment comment l'expliquer, on ne pense simplement que le choix du rôle n'impact pas tant que ça la sensibilité. 
 
 ## X) Est ce que les joueurs damage privilégient les souris plus légères contrairement aux autres rôles ?
 
-On peut s'attendre à ce que ce soit le cas pour les mêmes raisons que la question précédente.
+On peut s'attendre à ce que ce soit le cas pour les mêmes raisons que la moyenne des sensibilités mais peut-être que le poids de la souris n'est pas si determinant pour la façon de jouer.
 
 ```{r}
 ggplot(player_data, aes(x = Role, y = MouseWeight, fill = Role)) +
@@ -670,6 +669,84 @@ On remarque une tendance pour tous les rôles autour des 80-90 et quelques excep
 
 Mais comme pour la question précédente, le rôle n'impact pas clairement le poids de la souris. Ces deux questions sont un peu "décalées" de la réalité car on pensait qu'il pouvait avoir une différence notable mais le gameplay entre Damage et les autres rôles ne doit pas tant différer que ça. 
 Peut-être que dans d'autres jeux les rôles Damage ou Duellist ont vraiment des sensibilités très différentes et des souris plus légères mais ce n'est pas le cas pour Overwatch.
+
+X) Il y a t-il un rôle moins joué chez les professionels, offrant potentiellement plus de chances de devenir profesionnel ?
+
+On ne sait pas vraiment à quoi s'attendre, Timo qui a déjà joué au jeu pense que qu'il y aura peut-être un peu plus de joueurs Damage.
+
+```{r}
+role_proportions <- player_data %>%
+  group_by(Role) %>%
+  summarise(Count = n()) %>%
+  mutate(Proportion = Count / sum(Count))
+
+# Créer le graphique en barres empilées
+ggplot(role_proportions, aes(x = "", y = Proportion, fill = Role)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_flip() +
+  labs(title = "Répartition des rôles chez les professionels",
+       x = NULL, y = NULL) +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        panel.grid = element_blank(),
+        plot.title = element_text(size = 16, hjust = 0.5, color = "black")) +
+  scale_fill_manual(values = c("#66c2a5", "#fc8d62", "#8da0cb")) +
+  geom_text(aes(label = scales::percent(Proportion, accuracy = 0.1)), position = position_stack(vjust = 0.5), size = 5, color = "black")
+
+```
+C'est donc le cas il y a quand même 43% de joueurs Damage dans les joueurs professionels pour 28% égalité pour Support et Tank.
+On peut donc penser qu'on aurait plus de chance de démarrer une carrière professionel en jouant Support ou Tank. 
+Car on rappelle dans une partie d'Overwatch il y a obligatoirement 2 Support, 2 Tank et 2 Damage.
+
+Si on estime que ces pourcentages reflètent également les joueurs en général, on peut conseiller au joueurs qui veulent éviter les files d'attentes de jouer Support ou Tank.
+
+X) tt
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Filtrer les données pour exclure les lignes où Skill Tier est "All"
+filtered_data <- data %>%
+  filter(`Skill Tier` != "All")
+
+# Calculer la différence de taux de victoire entre le niveau de compétence le plus bas et le plus élevé pour chaque héros
+win_rate_diff <- filtered_data %>%
+  group_by(Hero) %>%
+  summarize(
+    min_win_rate = min(`Win Rate, %`, na.rm = TRUE),
+    max_win_rate = max(`Win Rate, %`, na.rm = TRUE),
+    win_rate_diff = max_win_rate - min_win_rate
+  )
+
+# Sélectionner les 5 héros avec la plus grande amélioration
+top_5_heroes <- win_rate_diff %>%
+  arrange(desc(win_rate_diff)) %>%
+  head(5)
+
+# Filtrer les données pour ne garder que les héros sélectionnés
+selected_data <- filtered_data %>%
+  filter(Hero %in% top_5_heroes$Hero)
+
+# Créer le graphique linéaire
+ggplot(selected_data, aes(x = `Skill Tier`, y = `Win Rate, %`, color = Hero, group = Hero)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  labs(title = "Évolution du Win Rate des 5 héros avec la meilleure amélioration",
+       x = "Niveau de compétence",
+       y = "Taux de victoire (%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 16, hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.title = element_text(size = 14),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 10))
+
+
+```
 
 ## 4) Quelle est la moyenne des gains des joueurs en fonction de leur nationalité ?
 
