@@ -670,38 +670,12 @@ On remarque une tendance pour tous les rôles autour des 80-90 et quelques excep
 Mais comme pour la question précédente, le rôle n'impact pas clairement le poids de la souris. Ces deux questions sont un peu "décalées" de la réalité car on pensait qu'il pouvait avoir une différence notable mais le gameplay entre Damage et les autres rôles ne doit pas tant différer que ça. 
 Peut-être que dans d'autres jeux les rôles Damage ou Duellist ont vraiment des sensibilités très différentes et des souris plus légères mais ce n'est pas le cas pour Overwatch.
 
-X) Il y a t-il un rôle moins joué chez les professionels, offrant potentiellement plus de chances de devenir profesionnel ?
+X) 
 
-On ne sait pas vraiment à quoi s'attendre, Timo qui a déjà joué au jeu pense que qu'il y aura peut-être un peu plus de joueurs Damage.
 
 ```{r}
-role_proportions <- player_data %>%
-  group_by(Role) %>%
-  summarise(Count = n()) %>%
-  mutate(Proportion = Count / sum(Count))
-
-# Créer le graphique en barres empilées
-ggplot(role_proportions, aes(x = "", y = Proportion, fill = Role)) +
-  geom_bar(stat = "identity", width = 1) +
-  coord_flip() +
-  labs(title = "Répartition des rôles chez les professionels",
-       x = NULL, y = NULL) +
-  theme_minimal() +
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank(),
-        panel.grid = element_blank(),
-        plot.title = element_text(size = 16, hjust = 0.5, color = "black")) +
-  scale_fill_manual(values = c("#66c2a5", "#fc8d62", "#8da0cb")) +
-  geom_text(aes(label = scales::percent(Proportion, accuracy = 0.1)), position = position_stack(vjust = 0.5), size = 5, color = "black")
 
 ```
-C'est donc le cas il y a quand même 43% de joueurs Damage dans les joueurs professionels pour 28% égalité pour Support et Tank.
-On peut donc penser qu'on aurait plus de chance de démarrer une carrière professionel en jouant Support ou Tank. 
-Car on rappelle dans une partie d'Overwatch il y a obligatoirement 2 Support, 2 Tank et 2 Damage.
-
-Si on estime que ces pourcentages reflètent également les joueurs en général, on peut conseiller au joueurs qui veulent éviter les files d'attentes de jouer Support ou Tank.
 
 X) tt
 
