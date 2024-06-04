@@ -670,22 +670,86 @@ On remarque une tendance pour tous les rôles autour des 80-90 et quelques excep
 Mais comme pour la question précédente, le rôle n'impact pas clairement le poids de la souris. Ces deux questions sont un peu "décalées" de la réalité car on pensait qu'il pouvait avoir une différence notable mais le gameplay entre Damage et les autres rôles ne doit pas tant différer que ça. 
 Peut-être que dans d'autres jeux les rôles Damage ou Duellist ont vraiment des sensibilités très différentes et des souris plus légères mais ce n'est pas le cas pour Overwatch.
 
-X) 
+X) Y a t-il eu des grosses différences de pick rate au fil des saisons ?
 
+On peut imaginer que oui car selon les patchs de mise à jour certains héros sont améliorés ou désavantagé.
 
 ```{r}
+library(dplyr)
+library(ggplot2)
+library(scales)
+
+# Fonction pour calculer le pick rate moyen par saison pour chaque héros
+calculate_pick_rate <- function(data, season) {
+  data %>%
+    group_by(Hero) %>%
+    summarise(Pick_Rate = mean(`Pick Rate, %`), Season = season)
+}
+
+# Charger et préparer les données pour chaque saison
+pick_rate_s1 <- calculate_pick_rate(datas1, "Saison 1")
+pick_rate_s2 <- calculate_pick_rate(datas2, "Saison 2")
+pick_rate_s3 <- calculate_pick_rate(datas3, "Saison 3")
+pick_rate_s4 <- calculate_pick_rate(datas4, "Saison 4")
+
+# Combiner les données de toutes les saisons
+all_pick_rate <- bind_rows(pick_rate_s1, pick_rate_s2, pick_rate_s3, pick_rate_s4)
+
+# Créer le graphique
+top_heroes <- all_pick_rate %>%
+  group_by(Hero) %>%
+  summarize(Evolution = diff(range(Pick_Rate)) / first(Pick_Rate)) %>%
+  arrange(desc(Evolution)) %>%
+  head(5) %>%
+  pull(Hero)
+
+# Filtrer les données pour inclure uniquement les cinq héros avec la plus grande évolution
+filtered_pick_rate <- all_pick_rate %>%
+  filter(Hero %in% top_heroes)
+
+# Assurez-vous que les données sont triées par saison
+filtered_pick_rate <- filtered_pick_rate %>%
+  arrange(Hero, Season)
+
+# Créer le graphique avec les données filtrées
+ggplot(filtered_pick_rate, aes(x = Season, y = Pick_Rate, color = Hero, group = Hero)) +
+  geom_line() +
+  geom_point() + # Ajouter les points pour mieux visualiser les données
+  labs(title = "Évolution du pick rate des 5 héros avec la plus grande évolution",
+       x = "Saison", y = "Pick Rate, %") +
+  theme_minimal()
+
+
 
 ```
+Sur le graphique on a affiché seulement les 5 héros avec la plus grosse évolution car on ne pouvait pas représenter tous les héros.
+Cependant pour Wrecking Ball, Symmetra et Echo l'évolution est minime, variant entre 0 et 2% tout au long des 4 saisons.
+Par contre pour Cassidy et Junker Queen on peut voir une évolution.
 
-X) tt
+Pour Cassidy on remarque un pic à 8% lors de la saison 3. Après quelques recherches sur internet, on a trouvé que lors de la saison 3 Cassidy a été buff. Sans rentrer dans les détails car c'est plus compliqué qu'une hausse de dégâts ou de vie, ce buff lui permet de se déplacer plus facilement sur la carte et de tirer plus loin. C'est donc pour cela que les joueurs l'ont plus joué lors de cette saison.
+On a également cherché les nerfs de la saison 4 pour voir si Cassidy s'y trouvait ce qui pourrait expliquer le retour en dessous de 4% de pick rate. Et on l'a effectivement trouvé, diminution des points de vie et réduction des dégâts de sa grenade ce qui désavantage grandement ce héro.
+
+Pour Junker Queen la hausse est observée lors de la saison 4, en tapant sur internet "junker queen saison 4 buff" on comprend vite que c'est le cas. Des gros titres comme "Insane JunkerQueen Buffs" ou encore "JunkerQueen is GIGABUFFED" nous font comprendre que c'est effectivement le cas, la hausse de son pick rate vient d'une augmentation de ses capacités. On y retrouve une augmentation de la taille du chargeur ou encore un soin plus rapide. Ces améliorations font qu'elle est désignée comme le tank le plus fort et domine tout les matchs.
+
+
+X) Est-ce que le taux de victoire des héros varie beaucoup selon les ranks ?
+
+On peut imaginer que oui car certains héros doivent nécessiter plus d'expérience pour être joué correctement.
 
 ```{r}
 library(ggplot2)
 library(dplyr)
 
+# Ordre des niveaux de compétence
+skill_levels <- c("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "Grandmaster")
+
 # Filtrer les données pour exclure les lignes où Skill Tier est "All"
 filtered_data <- data %>%
   filter(`Skill Tier` != "All")
+
+# Convertir la colonne `Skill Tier` en facteur avec les niveaux spécifiés
+filtered_data <- filtered_data %>%
+  mutate(`Skill Tier` = factor(`Skill Tier`, levels = skill_levels))
 
 # Calculer la différence de taux de victoire entre le niveau de compétence le plus bas et le plus élevé pour chaque héros
 win_rate_diff <- filtered_data %>%
@@ -710,7 +774,7 @@ ggplot(selected_data, aes(x = `Skill Tier`, y = `Win Rate, %`, color = Hero, gro
   geom_line(size = 1) +
   geom_point(size = 2) +
   labs(title = "Évolution du Win Rate des 5 héros avec la meilleure amélioration",
-       x = "Niveau de compétence",
+       x = "Rank",
        y = "Taux de victoire (%)") +
   theme_minimal() +
   theme(plot.title = element_text(size = 16, hjust = 0.5),
@@ -720,7 +784,12 @@ ggplot(selected_data, aes(x = `Skill Tier`, y = `Win Rate, %`, color = Hero, gro
         legend.text = element_text(size = 10))
 
 
+
 ```
+Encore une fois on représente seulement les 5 héros avec l'évolution la plus flagrante car on ne peut pas tous les visualiser.
+
+En général, on voit que les taux de victoire des héros augmentent à mesure que les rangs montent. Les joueurs de rangs plus élevés comprennent mieux comment utiliser les compétences des héros et ils sont plus coordonnés en équipe. Ils savent vraiment comment tirer le meilleur parti de leurs personnages, ce qui se traduit par de meilleurs résultats. Et quand les équipes jouent bien ensemble, ça fait une grosse différence dans le taux de victoire.
+De plus les joueurs de haut niveau s'entrainent rigoureusement et connaissent parfaitement leur héros ce qui augmente leur taux de victoire.
 
 ## 4) Quelle est la moyenne des gains des joueurs en fonction de leur nationalité ?
 
