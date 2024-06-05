@@ -490,11 +490,8 @@ top_10_heroes_hps <- head(heroes3, 10)
 ggplot(top_10_heroes_hps, aes(x = reorder(Heroes, -HPS), y = HPS, label = HPS)) +
   geom_bar(stat = "identity", fill = "green") +
   geom_text(position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
-<<<<<<< HEAD
   labs(title = "Top héros avec le plus de soins par seconde",
-=======
-  labs(title = "Top 10 héros avec le plus de Heal per seconds (Hors capacités)",
->>>>>>> bd2f623c430c56b9db4573337b2ca248dd8a626d
+  labs(title = "Top 10 héros avec le plus de Heal per seconds (Hors capacités)"),
        x = "Héros",
        y = "Heal per second") +
   theme_minimal() +
