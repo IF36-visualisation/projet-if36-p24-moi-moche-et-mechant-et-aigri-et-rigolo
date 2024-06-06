@@ -490,7 +490,7 @@ ggplot(top_10_heroes_life, aes(x = reorder(Heroes, -Life), y = Life, fill = Role
 ```
 On remarque que les tanks sont bien les personnages avec le plus de vie du jeu. Ils sont tous situés entre 400 et 600. La raison pour laquelle zarya n'ai que 400 points de vie, est qu'elle possède une capacité qui lui permet de se protéger de tous dégâts pendant quelques secondes. Après les tanks, viennent les dps qui possèdent le plus de points de vie.
 
-## 8) Quels sont les 10 héros avec le plus de soins par seconde?
+## 8) Quels sont les héros avec le plus de soins par seconde?
 
 
 Pour répondre à cette question, nous nous appuierons sur la statistique de soins par seconde de chaque héro. On s'attend à retrouver tous les healers dans le classement.
