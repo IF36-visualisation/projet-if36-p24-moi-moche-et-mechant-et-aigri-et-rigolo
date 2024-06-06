@@ -807,6 +807,7 @@ De plus les joueurs de haut niveau s'entrainent rigoureusement et connaissent pa
 
 Pour répondre à cette question, nous allons d'abord fusionner les données des joueurs avec les données des pays pour obtenir le nom complet des pays. Ensuite, nous allons agréger les gains des joueurs par nationalité et calculer la moyenne des gains pour chaque pays. Enfin, nous allons créer un graphique à barres horizontales pour visualiser les moyennes des gains par nationalité. Nous nous attendons à voir des disparités significatives dans les gains moyens des joueurs en fonction de leur nationalité. Les pays avec une industrie de l'e-sport plus développée ou des opportunités de tournois plus nombreuses pourraient avoir des gains moyens plus élevés. À l'inverse, les pays avec moins de soutien financier ou d'infrastructures pourraient avoir des gains moyens plus bas.
 ```{r}
+# Filtration des joueurs d'Overwatch
 overwatch_players <- players[players$Game == "Overwatch", ]
 overwatch_players$CountryCode <- tolower(overwatch_players$CountryCode)
 
@@ -817,53 +818,17 @@ country_codes$Two_Letter_Country_Code <- tolower(country_codes$Two_Letter_Countr
 # Fusion des données de joueurs et de pays
 merged_data <- merge(overwatch_players, country_codes, by.x = "CountryCode", by.y = "Two_Letter_Country_Code", all.x = TRUE)
 
-# Calcul des gains moyens par pays
-average_earnings <- aggregate(TotalUSDPrize ~ Country_Name, data = merged_data, FUN = mean, na.rm = TRUE)
-average_earnings <- average_earnings[order(-average_earnings$TotalUSDPrize),]
-average_earnings$Country_Name <- tolower(average_earnings$Country_Name)
+# Calcul des gains totaux par pays
+total_earnings <- aggregate(TotalUSDPrize ~ Country_Name, data = merged_data, FUN = sum, na.rm = TRUE)
+total_earnings <- total_earnings[order(-total_earnings$TotalUSDPrize),]
+total_earnings$Country_Name <- tolower(total_earnings$Country_Name)
 
 # Chargement des données cartographiques
 world_map <- map_data("world")
 world_map$region <- tolower(world_map$region)
 
-# Fusion des données cartographiques avec les gains moyens
-map_data <- merge(world_map, average_earnings, by.x = "region", by.y = "Country_Name", all.x = TRUE)
-
-# Création de la carte avec ggplot2
-ggplot(map_data, aes(x = long, y = lat, group = group, fill = TotalUSDPrize)) +
-  geom_polygon() +
-  scale_fill_gradient(
-    low = "green", 
-    high = "red", 
-    na.value = "lightgrey", 
-    name = "Gains Moyens (USD)", 
-    limits = c(0, max(map_data$TotalUSDPrize, na.rm = TRUE))  # Définir les limites de l'échelle à partir de 0
-  ) +
-  coord_fixed(1.3) +  # Cela aide à maintenir les proportions correctes sur la carte
-  labs(title = "Moyenne des Gains par Nationalité des Joueurs d'Overwatch") +
-  theme_minimal()
-```
-```{r}
-players$CountryCode <- tolower(players$CountryCode)
-
-# Préparer les données de pays
-country_codes$Country_Name <- sub(",.*", "", country_codes$Country_Name)
-country_codes$Two_Letter_Country_Code <- tolower(country_codes$Two_Letter_Country_Code)
-
-# Fusion des données de tous les joueurs et de pays
-merged_data <- merge(players, country_codes, by.x = "CountryCode", by.y = "Two_Letter_Country_Code", all.x = TRUE)
-
-# Calcul des gains moyens par pays pour tous les jeux
-average_earnings <- aggregate(TotalUSDPrize ~ Country_Name, data = merged_data, FUN = mean, na.rm = TRUE)
-average_earnings <- average_earnings[order(-average_earnings$TotalUSDPrize),]
-average_earnings$Country_Name <- tolower(average_earnings$Country_Name)
-
-# Chargement des données cartographiques
-world_map <- map_data("world")
-world_map$region <- tolower(world_map$region)
-
-# Fusion des données cartographiques avec les gains moyens
-map_data <- merge(world_map, average_earnings, by.x = "region", by.y = "Country_Name", all.x = TRUE)
+# Fusion des données cartographiques avec les gains totaux
+map_data <- merge(world_map, total_earnings, by.x = "region", by.y = "Country_Name", all.x = TRUE)
 
 # Création de la carte avec ggplot2
 ggplot(map_data, aes(x = long, y = lat, group = group, fill = TotalUSDPrize/1000)) +
@@ -872,12 +837,51 @@ ggplot(map_data, aes(x = long, y = lat, group = group, fill = TotalUSDPrize/1000
     low = "green", 
     high = "red", 
     na.value = "lightgrey", 
-    name = "Gains Moyens en milliers(USD)", 
+    name = "Gains Totaux (en milliers USD)", 
     limits = c(0, max(map_data$TotalUSDPrize/1000, na.rm = TRUE))  # Définir les limites de l'échelle à partir de 0
   ) +
   coord_fixed(1.3) +  # Cela aide à maintenir les proportions correctes sur la carte
-  labs(title = "Moyenne des Gains par Nationalité des Joueurs de Jeux Vidéo") +
+  labs(title = "Total des Gains par Nationalité des Joueurs d'Overwatch") +
   theme_minimal()
+
+```
+```{r}
+# Standardisation des codes de pays dans le dataframe des joueurs
+players$CountryCode <- tolower(players$CountryCode)
+
+# Préparation des données de pays
+country_codes$Country_Name <- sub(",.*", "", country_codes$Country_Name)
+country_codes$Two_Letter_Country_Code <- tolower(country_codes$Two_Letter_Country_Code)
+
+# Fusion des données de tous les joueurs et des pays
+merged_data <- merge(players, country_codes, by.x = "CountryCode", by.y = "Two_Letter_Country_Code", all.x = TRUE)
+
+# Calcul des gains totaux par pays pour tous les jeux
+total_earnings <- aggregate(TotalUSDPrize ~ Country_Name, data = merged_data, FUN = sum, na.rm = TRUE)
+total_earnings <- total_earnings[order(-total_earnings$TotalUSDPrize),]
+total_earnings$Country_Name <- tolower(total_earnings$Country_Name)
+
+# Chargement des données cartographiques
+world_map <- map_data("world")
+world_map$region <- tolower(world_map$region)
+
+# Fusion des données cartographiques avec les gains totaux
+map_data <- merge(world_map, total_earnings, by.x = "region", by.y = "Country_Name", all.x = TRUE)
+
+# Création de la carte avec ggplot2
+ggplot(map_data, aes(x = long, y = lat, group = group, fill = TotalUSDPrize/1000)) +
+  geom_polygon() +
+  scale_fill_gradient(
+    low = "green", 
+    high = "red", 
+    na.value = "lightgrey", 
+    name = "Gains Totaux en milliers (USD)", 
+    limits = c(0, max(map_data$TotalUSDPrize/1000, na.rm = TRUE))  # Définir les limites de l'échelle à partir de 0
+  ) +
+  coord_fixed(1.3) +  # Cela aide à maintenir les proportions correctes sur la carte
+  labs(title = "Total des Gains par Nationalité des Joueurs de Jeux Vidéo") +
+  theme_minimal()
+
 ```
 ## x)Quelles sont les meilleures équipes d'Overwatch en termes de gains moyens par tournoi?
 
@@ -893,10 +897,10 @@ top_teams <- overwatch_team_data %>%
 # Créer un graphique en barres pour afficher les gains moyens par tournoi de ces équipes
 ggplot(top_teams, aes(x=reorder(TeamName, AverageEarningsPerTournament), y=AverageEarningsPerTournament/1000, fill=TeamName)) +
   geom_col(show.legend = FALSE) +
-  geom_text(aes(label=round(AverageEarningsPerTournament/1000, 2)), vjust=-0.3, size=3.5, color="black") +
+  geom_text(aes(label=round(AverageEarningsPerTournament/1000, 2)), vjust=-0.2, size=2.7, color="black") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle=45, hjust=1, size=12), axis.title.x=element_text(size=14), axis.title.y=element_text(size=14)) +
-  labs(title="Top 20 des Équipes Overwatch par Gains Moyens par Tournoi", x="Équipe", y="Gains Moyens par Tournoi en milliers USD")
+  labs(title="Top 20 des Équipes Overwatch par Gains Moyens par Tournoi", x="Équipe", y="Gains par Tournoi (milliers USD)")
 ```
 L'analyse du graphique montre une répartition inégale des gains, mettant en évidence la supériorité économique et compétitive de certaines équipes. Les équipes comme San Francisco Shock et Vancouver Titans dominent, illustrant l'impact de stratégies efficaces et d'une excellente gestion de ressources. La position géographique des équipes peut également jouer un rôle dans leurs performances financières, avec des régions comme l'Amérique du Nord et l'Asie-Pacifique étant des foyers d'excellence dans l'e-sport.
 
