@@ -259,7 +259,7 @@ top_10_heroes <- head(heroes1, 10)
 
 top_10_heroes <- top_10_heroes %>%
   mutate(Bar_Color = case_when(
-    Heroes == "Zenyatta" ~ "DPS",
+    Heroes == "Zenyatta" ~ "Soin",
     Heroes == "Zarya" ~ "Tank",
     TRUE ~ "Soins"
   ))
@@ -464,21 +464,28 @@ heroes2 <- mutate(heroes2, Life = as.integer(Life))
 
 heroes2 <- arrange(heroes2, desc(Life))
 top_10_heroes_life <- head(heroes2, 10)
+top_10_heroes_life <- top_10_heroes_life %>%
+  mutate(Role = case_when(
+    Heroes %in% c("Bastion Recon", "Bastion Turret", "Mei", "Reaper") ~ "DPS",
+    TRUE ~ "red"
+  ))
 
-# Tracer le graphique de type bar chart pour "Life"
-ggplot(top_10_heroes_life, aes(x = reorder(Heroes, -Life), y =Life, label = Life)) +
-  geom_bar(stat = "identity", fill = "blue") +
+ggplot(top_10_heroes_life, aes(x = reorder(Heroes, -Life), y = Life, fill = Role, label = Life)) +
+  geom_bar(stat = "identity") +
   geom_text(position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
   labs(title = "Top 10 héros avec le plus de Vie",
        x = "Héros",
-       y = "Vie") +
+       y = "Vie",
+       fill = "Role") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_blank(),
         panel.background = element_blank(),
-        plot.background = element_blank())
+        plot.background = element_blank()) +
+  scale_fill_manual(values = c("blue", "red"), 
+                    labels = c("DPS", "Tank"))
 
 ```
 On remarque que les tanks sont bien les personnages avec le plus de vie du jeu. Ils sont tous situés entre 400 et 600. La raison pour laquelle zarya n'ai que 400 points de vie, est qu'elle possède une capacité qui lui permet de se protéger de tous dégâts pendant quelques secondes. Après les tanks, viennent les dps qui possèdent le plus de points de vie.
