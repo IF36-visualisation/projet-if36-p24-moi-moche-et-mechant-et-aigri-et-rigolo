@@ -872,7 +872,9 @@ ggplot(map_data, aes(x = long, y = lat, group = group, fill = TotalUSDPrize/1000
   labs(title = "Moyenne des Gains par Nationalité des Joueurs de Jeux Vidéo") +
   theme_minimal()
 ```
+## x)Quelles sont les meilleures équipes d'Overwatch en termes de gains moyens par tournoi?
 
+Pour répondre à cette question, nous allons d'abord filtrer les données pour ne conserver que les équipes d'Overwatch. Ensuite, nous allons calculer les gains moyens par tournoi pour chaque équipe en divisant le total des gains par le nombre total de tournois auxquels elles ont participé. Enfin, nous allons classer les équipes en fonction de leurs gains moyens par tournoi et créer un graphique en barres pour afficher les 20 meilleures équipes en termes de gains moyens par tournoi.
 ```{r}
 overwatch_team_data <- team_data[team_data$Game == "Overwatch", ]
 # Ajouter une nouvelle colonne pour les gains moyens par tournoi directement
@@ -889,7 +891,11 @@ ggplot(top_teams, aes(x=reorder(TeamName, AverageEarningsPerTournament), y=Avera
   theme(axis.text.x = element_text(angle=45, hjust=1, size=12), axis.title.x=element_text(size=14), axis.title.y=element_text(size=14)) +
   labs(title="Top 20 des Équipes Overwatch par Gains Moyens par Tournoi", x="Équipe", y="Gains Moyens par Tournoi en milliers USD")
 ```
+L'analyse du graphique montre une répartition inégale des gains, mettant en évidence la supériorité économique et compétitive de certaines équipes. Les équipes comme San Francisco Shock et Vancouver Titans dominent, illustrant l'impact de stratégies efficaces et d'une excellente gestion de ressources. La position géographique des équipes peut également jouer un rôle dans leurs performances financières, avec des régions comme l'Amérique du Nord et l'Asie-Pacifique étant des foyers d'excellence dans l'e-sport.
 
+## x)Quelles nationalités sont les plus communes parmi les 100 joueurs d'Overwatch les mieux payés?
+
+Pour répondre à cette question, nous allons d'abord filtrer les données pour ne conserver que les joueurs d'Overwatch. Ensuite, nous allons calculer les nationalités les plus courantes parmi les 100 joueurs les mieux payés en termes de gains totaux. Enfin, nous allons créer un graphique en barres pour visualiser les nationalités des joueurs les mieux payés.
 ```{r}
 # Filtrer les données pour les joueurs d'Overwatch
 overwatch_players <- players[players$Game == "Overwatch", ]
@@ -918,6 +924,11 @@ ggplot(top_players_by_earnings, aes(x = reorder(Country_Name, n), y = n)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 ```
+Il est évident que la Corée domine largement, indiquant non seulement un talent et un investissement significatifs dans ce pays pour le jeu, mais aussi une scène compétitive très active et lucrative. La présence prépondérante des joueurs coréens peut refléter des infrastructures de formation avancées et un soutien généralisé pour les eSports. Les autres pays représentés, bien que contribuant également à la scène internationale d'Overwatch, montrent des nombres considérablement plus bas, soulignant la suprématie et l'attrait du niveau compétitif en Corée.
+
+## x)Quelle est la distribution des gains totaux parmi les 100 meilleurs joueurs d'Overwatch, segmentée par rôle?
+
+Pour répondre à cette question, nous allons d'abord filtrer les données pour ne conserver que les joueurs d'Overwatch. Ensuite, nous allons joindre les données des joueurs avec les données de rôles basées sur les handles correspondants. Nous allons ensuite filtrer les joueurs pour obtenir les 100 joueurs les mieux payés. Enfin, nous allons créer un graphique en boîte pour visualiser la distribution des gains totaux par rôle parmi les 100 meilleurs joueurs d'Overwatch.
 ```{r}
 overwatch_players <- players[players$Game == "Overwatch", ]
 average_earnings <- aggregate(TotalUSDPrize ~ Country_Name, data = merged_data, FUN = mean, na.rm = TRUE)
@@ -936,12 +947,22 @@ earnings_by_role <- top_players_by_earnings %>%
   group_by(Role) %>%
   summarize(AverageEarnings = mean(TotalUSDPrize), .groups = 'drop')
 # Création d'un graphique en barres pour visualiser les gains moyens par rôle
-ggplot(earnings_by_role, aes(x = Role, y = AverageEarnings, fill = Role)) +
-  geom_col(show.legend = FALSE) +
-  labs(title = "Gains moyens par rôle parmi les 100 meilleurs joueurs", x = "Rôle", y = "Gains moyens (USD)") +
+ggplot(top_players_by_earnings, aes(x = Role, y = TotalUSDPrize, fill = Role)) +
+  geom_boxplot() +
+  labs(title = "Distribution des gains par rôle parmi les 100 meilleurs joueurs d'Overwatch",
+       x = "Rôle",
+       y = "Gains totaux (USD)") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none")  # Supprimer la légende si les couleurs par rôle ne sont pas nécessaires
 ```
+Les trois rôles montrent une variabilité notable dans leurs gains, avec des écarts importants entre les quartiles inférieurs et supérieurs. Cela indique que, bien que certains joueurs dans chaque rôle gagnent des sommes très élevées, d'autres gagnent nettement moins.
+La médiane des gains est à peu près similaire entre les rôles, mais les joueurs de rôle "Tank" ont tendance à avoir une distribution légèrement plus étroite comparée à celle des rôles "Damage" et "Support". Cela pourrait suggérer une plus grande cohérence dans les gains parmi les tanks, tandis que les rôles de Damage et Support pourraient voir des extrêmes plus marqués.
+Les écarts larges dans les rôles "Damage" et "Support" peuvent refléter l'impact de la performance individuelle et la popularité de certains héros dans ces catégories. Les tanks, souvent essentiels mais moins susceptibles de réaliser des actions spectaculaires, montrent une distribution plus homogène des gains.
+
+## x)Quels sont les gains moyens par rôle et par héros parmi les joueurs d'Overwatch?
+
+Pour répondre à cette question, nous allons d'abord filtrer les données pour ne conserver que les joueurs d'Overwatch. Ensuite, nous allons joindre les données des joueurs avec les données de rôles basées sur les handles correspondants. Nous allons ensuite filtrer les joueurs pour obtenir les 100 joueurs les mieux payés. Enfin, nous allons calculer les gains moyens par rôle et par héros parmi ces 100 joueurs et créer un graphique en barres pour visualiser ces données.
 ```{r}
 overwatch_players <- players[players$Game == "Overwatch", ]
 # Jointure des données des joueurs d'Overwatch avec les données de rôles basée sur les handles correspondants
