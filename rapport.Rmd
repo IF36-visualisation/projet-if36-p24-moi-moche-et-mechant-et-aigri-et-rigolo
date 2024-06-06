@@ -999,3 +999,4 @@ Observations : On peut observer que les gains moyens des joueurs d'Overwatch var
 
 ## Application Shiny
 
+![](/home/juliette/Pictures/Screenshot_20240606_143040.png)
