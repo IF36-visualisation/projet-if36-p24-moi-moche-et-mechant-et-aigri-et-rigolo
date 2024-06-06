@@ -204,7 +204,7 @@ country_codes <- read_csv("./data/country-and-continent-codes-list.csv")
 heroes <-  read_csv("./data/Overwatch_edopic.csv")
 ```
 
-## XX) Quels sont les héros les plus/moins joués ?
+## 1) Quels sont les héros les plus/moins joués ?
 
 Comme dit dans l'introduction, cette question seule sera compliquée à analyser ; on aura des informations sur les héros les plus joués sans pouvoir définir pourquoi. Pourtant cette question sera la base pour analyser les visualisations suivantes, ou inversement, les analyses suivantes pourront nous permettre d'expliquer pourquoi certains héros sont plus ou moins joués. 
 
@@ -237,7 +237,7 @@ Il est assez étonnant de voir 4 héros de type Support sur les 10 plus joués ;
 
 Nos visualisations suivantes nous permettrons peut-être de compléter ou d'amener de nouvelles interprétations à ces résultats.
 
-## 1) Quel sont les 10 héros qui ont le plus haut taux de dégâts par seconde ?
+## 2) Quel sont les 10 héros qui ont le plus haut taux de dégâts par seconde ?
 
 Pour répondre à cette question, nous nous appuierons sur le nombre de dégâts par seconde infligés par chaque héro. On peut s'attendre à trouver une grande partie de personnages Damage dans le lot puisque c'est leur utilité première. Nous ne prendrons dans ce graphique que des héros sans capacité (capacité ultime) puisque ces dernières peuvent fausser les stats.
 
@@ -257,15 +257,14 @@ heroes1 <- arrange(heroes1, desc(DPS))
 
 top_10_heroes <- head(heroes1, 10)
 
-# Ajouter une colonne pour les couleurs
 top_10_heroes <- top_10_heroes %>%
   mutate(Bar_Color = case_when(
-    Heroes == "Zenyatta" ~ "blue",
-    Heroes == "Zarya" ~ "red",
-    TRUE ~ "orange"
+    Heroes == "Zenyatta" ~ "Soin",
+    Heroes == "Zarya" ~ "Tank",
+    TRUE ~ "Soins"
   ))
 
-# Créer le graphique avec les couleurs personnalisées
+# Créer le graphique avec les couleurs personnalisées et descriptions
 ggplot(top_10_heroes, aes(x = reorder(Heroes, -DPS), y = DPS, fill = Bar_Color, label = DPS)) +
   geom_bar(stat = "identity") +
   geom_text(position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
@@ -279,13 +278,14 @@ ggplot(top_10_heroes, aes(x = reorder(Heroes, -DPS), y = DPS, fill = Bar_Color, 
         panel.border = element_blank(),
         panel.background = element_blank(),
         plot.background = element_blank()) +
-  scale_fill_manual(values = c("orange", "blue", "red"))
-
+  scale_fill_manual(values = c("orange", "blue", "red"), 
+                    name = "Role",
+                    labels = c("Soins", "DPS", "Tank"))
 ```
 
 Observations : A l'exception de Zarya (Tank), et Zenyatta (Soin), nous retrouvons 8 héros de type Dégât dans le top 10, voilà qui confirme nos suppositions. On remarque par contre qu'un héro réalise beaucoup plus de DPS que n'importe quel autre. On pourrait, à première vue, penser que le jeu n'est pas bien équilibré, mais cela s'explique par le fait que Bastion possède deux formes, dont la forme tourelle (Bastion Turret), qui fait de lui une tourelle, assez large et immobile qui tire avec une énorme cadence. Certe le personnage fait beaucoup de dégâts par seconde, mais il est gros et très facilement touchable en contrepartie.
 
-## XX) Quel rôle de héros provoque le plus de dégâts en jeu ?
+## 3) Quel rôle de héros provoque le plus de dégâts en jeu ?
 
 Pour répondre à cette question, nous nous appuierons sur le nombre de dégâts infligés par les joueurs en 10 minutes, en fonction du rôle de leur héros. 
 On s'attend ici à trouver le rôle Damage en première place ; c'est en effet son but principal de provoquer des dégâts.
@@ -331,7 +331,7 @@ Par contre, on peut remarquer que la distribution des dégâts est bien plus fai
 
 Les rôles support ont aussi une répartition assez répandue mais il existe assez peu de héros de ce type donc il est difficile d'en tirer des conclusions. 
 
-## XX) Quel est le lien entre le taux de sélection d'un héros et son nombre de dégâts sur 10min ?
+## 4) Quel est le lien entre le taux de sélection d'un héros et son nombre de dégâts sur 10min ?
 
 Pour trouver cette question, j'ai tout d'abord effectué une matrice avec ggpairs pour essayer de trouver des corrélations entre mes variables de dégâts, de KDA Ratio, de fréquence de choix et de taux de victoires. Le plus haut coefficient de corrélation se trouvait entre le taux de sélection du héros et le nombre de dégâts sur 10min.
 
@@ -371,7 +371,7 @@ Il est donc difficile d'interpréter ce graphique et de trouver des raisons à c
 En conclusion, bien que ce coefficient de corrélation négatif soit notable, son interprétation nécessiterait une analyse plus approfondie pour tirer des conclusions solides sur la relation entre les éliminations par 10 minutes et le choix des héros.
 Ce chiffre peut très bien être dû au hasard.
 
-## XX) Quels joueurs ont le meilleur ratio en jeu ?
+## 5) Quels joueurs ont le meilleur ratio en jeu ?
 
 Une des manières de comparer les joueurs est de regarder leur KDA Ratio (Kill, Deaths, Assists Ratio), c'est-à-dire le ratio entre le nombre de joueurs tués (ou contribué à tuer) et le nombre de morts du joueur. Un ratio élevé indique généralement une bonne performance, car le joueur participe à plus d'éliminations (kills et assistances) tout en mourant moins souvent. Par exemple, un KDA Ratio de 2 veut dire qu'en moyenne, pour chaque mort, un joueur fera 2 éliminations. 
 
@@ -405,7 +405,7 @@ Ensuite, on peut observer sur ce graphique que du niveau Bronze à Diamant, on o
 
 Pour autant cette croissance reste peu marquée et s'estompe arrivée à plus haut niveau ; cela peut-être expliqué par le fait que quand on monte de niveau, nos adversaires montent de niveau aussi. Ainsi même si un joueur en Grand Maître sera meilleur qu'un joueur en Diamant, comme ses adversaires seront aussi des Grand Maîtres, ils seront plus difficiles à éliminer et donc le ratio du joueur n'augmentera pas forcément.
 
-## XX) Comment les dégâts provoqués ont-ils évolués selon les saisons ?
+## 6) Comment les dégâts provoqués ont-ils évolués selon les saisons ?
 
 
 Mon dataset comprenant des données sur les 4 saisons du jeu, il me paraît intéressant de visualiser l'évolution du jeu et des joueurs. 
@@ -453,7 +453,7 @@ Pourtant, on remarque quand même une légère augmentation pour chaque rôle en
 Ces hypothèses restent discutables, et peut-être que les légères variations visibles sont dûes au hasard ou à d'autres facteurs non étudiés.
 
 
-## X) Quels sont les 10 héros qui ont le plus de point de vie?
+## 7) Quels sont les 10 héros qui ont le plus de point de vie?
 
 Pour répondre à cette question, nous nous appuierons sur les points de vie de chaque héros pour en faire un classement. On s'attend donc à retrouver presque exclusivement des tanks, puisque ce sont ceux qui sont censés être en première ligne, et avoir la capacité à encaisser le plus de dégâts.
 
@@ -464,26 +464,33 @@ heroes2 <- mutate(heroes2, Life = as.integer(Life))
 
 heroes2 <- arrange(heroes2, desc(Life))
 top_10_heroes_life <- head(heroes2, 10)
+top_10_heroes_life <- top_10_heroes_life %>%
+  mutate(Role = case_when(
+    Heroes %in% c("Bastion Recon", "Bastion Turret", "Mei", "Reaper") ~ "DPS",
+    TRUE ~ "red"
+  ))
 
-# Tracer le graphique de type bar chart pour "Life"
-ggplot(top_10_heroes_life, aes(x = reorder(Heroes, -Life), y =Life, label = Life)) +
-  geom_bar(stat = "identity", fill = "blue") +
+ggplot(top_10_heroes_life, aes(x = reorder(Heroes, -Life), y = Life, fill = Role, label = Life)) +
+  geom_bar(stat = "identity") +
   geom_text(position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
   labs(title = "Top 10 héros avec le plus de Vie",
        x = "Héros",
-       y = "Vie") +
+       y = "Vie",
+       fill = "Role") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_blank(),
         panel.background = element_blank(),
-        plot.background = element_blank())
+        plot.background = element_blank()) +
+  scale_fill_manual(values = c("blue", "red"), 
+                    labels = c("DPS", "Tank"))
 
 ```
 On remarque que les tanks sont bien les personnages avec le plus de vie du jeu. Ils sont tous situés entre 400 et 600. La raison pour laquelle zarya n'ai que 400 points de vie, est qu'elle possède une capacité qui lui permet de se protéger de tous dégâts pendant quelques secondes. Après les tanks, viennent les dps qui possèdent le plus de points de vie.
 
-## X) Quels sont les 10 héros avec le plus de soins par seconde?
+## 8) Quels sont les héros avec le plus de soins par seconde?
 
 
 Pour répondre à cette question, nous nous appuierons sur la statistique de soins par seconde de chaque héro. On s'attend à retrouver tous les healers dans le classement.
@@ -514,7 +521,7 @@ ggplot(top_10_heroes_hps, aes(x = reorder(Heroes, -HPS), y = HPS, label = HPS)) 
 ```
 Comme attendu, tous les healers apparaissent. IL est bon de noter que dans le dataset que j'utilise, nous n'avons pas les héros les plus récents, c'est pour cette raison qu'il manque quelques personnages dans ce classement. On  note tout de même une énorme différence entre Ana et Lucio, cela s'explique par le fait que Ana ne peut healer qu'une personne à la fois, en lui tirant des seringues soignantes, tandis que lucio possède une zone de heal. Ce dernier a donc un moins gros heal par seconde, mais peut potentiellement soigner tous ses alliés en même temps si ils sont bien placés dans sa zone. Nous avions vu dans le barchart de la question X où nous étudions les héros les plus joués, que les 2 personnages, tout rôles confondus en tête étaient Mercy et Ana. On peut comprendre pourquoi dans cette visualisation, vu que Ana et Mercy sont clairement devant au niveau des points de vie prodigués par seconde.
 
-## X) Est ce qu'il existe une corrélation entre les points de vie des personnages et les dégâts qu'ils infligent?
+## 9) Est ce qu'il existe une corrélation entre les points de vie des personnages et les dégâts qu'ils infligent?
 
 On pourrait se demander si les personnages qui font le plus de dégâts sont ceux qui ont le moins de points de vie, et inversement. Cette hypothèse peut s'avérer crédible, puisqu"on pourrait se poser des questions sur l'équilibrage si les personnages les plus resistants sont également ceux qui font le plus mal. Nous allons donc essayer de répondre à cette question en faisant un scatterplot, et regarder si une tendance se dessine. Pour se faire, un point représente un personnage, en x, ses points de vie, et en y, ses dégâts.
 
@@ -533,7 +540,7 @@ ggplot(heroes4, aes(x = Life, y = `Damage per second`)) +
 Les valeurs ne suivent aucune tendance. Il n'y a donc aucun rapport entre les points de vie et les dégâts par seconde. Cela peut s'expliquer par le fait qu'une des choses les plus importantes dans Overwatch, ce sont les capacités des héros. Ces dernières ne dépendent pas de leurs points de vies, ou de leur dégâts mais son propre à chacun selon les personnages et peuvent totalement changer l'issu d'un combat.
 
 
-## X) Est ce que les healers avec le plus de soin par seconde sont ceux qui sont le plus joués ? 
+## 10) Est ce que les healers avec le plus de soin par seconde sont ceux qui sont le plus joués ? 
 
 Nous avions vu dans le graphique X (insérer le numéro de la question) les héros les plus joués. Il serait donc intéressant de vérifier si les healers qui prodiguent le plus de soins par seconde sont ceux qui sont aussi les plus plus utilisés. Pour ce faire, nous allons prendre les 2 datasets nécessaire: celui qui contient la feature PickRate et celui qui contient les stats de soins par seconde. Nous ne garderons que les 4 healers présents dans le dataset utilisé dans les 3 graphiques précédents. Après avoir trié, et fusionner, on se retrouvera avec un seul dataset. Il restera un seul problème: dans le jeu de données contenant la valeur Pick Rate, chaque héro est cité plusieurs fois, car son taux d'utilisation diffère selon l'élo dans lequel il est joué (bronze, argent, or etc..) J'ai donc choisi de faire la moyenne de ce taux, pôur avoir un aperçu global. Une fois la dataset fusionné, avec les bons héros et un seul Pick Rate à chaque fois, nous pourrons créer un nuage de points pour déceler une tendance ou non.
 
@@ -567,9 +574,7 @@ ggplot(merged_data, aes(x = Pick_Rate, y = Heal_per_sec, color = Heroes)) +
 ```
 Le taux de sélection correspond à tous héros confondus, le teux de personnes qui prennent X personnage. Une fois encore, nous ne trouvons pas réellement de tendance. Nous pouvons tout de même noter que Ana et Mercy sont les héros qui font le plus de soins, et sont les deux les plus utilisés. Bien que Zenyatta heal plus que Lucio, ce dernier se retrouve quand même au dessus, sûrement parce que zen ne peut healer qu'une personne à la fois, tandis que lucio peut ditribuer du soin à plusieurs alliés à la fois. Pour Mercy, cela peut être dû au fait que cette dernière peut utiliser une de ces capacité pour réanimer des alliés.
 
-=======
->>>>>>> bd2f623c430c56b9db4573337b2ca248dd8a626d
-## X) Quelle est la distribution de la sensibilité des joueurs, et y a-t-il des tendances notables ?
+## 11) Quelle est la distribution de la sensibilité des joueurs, et y a-t-il des tendances notables ?
 
 On s'attend à ce que les joueurs aient globalement une sensibilité similaire. Mais il y a toujours des joueurs qui ont des façons de jouer différentes que ce soit l'inclinaison du clavier ou encore la façon de tenir la souris donc ça ne nous étonnerait pas s'il y a quelques joueurs qui sortent du lot.
 
@@ -605,7 +610,7 @@ Nous avons quelques joueurs avec des sensibilités extrémements élevés : ici 
 
 Les joueurs avec une sensibilité au-dessus de 8 sont également assez rares avec une dizaine entre 8 et 10 et 5 joueurs entre 10 et 14.
 
-## X) Est-ce que les joueurs qui joue le même rôle ont des sensibilités similaires ?
+## 12) Est-ce que les joueurs qui joue le même rôle ont des sensibilités similaires ?
 
 On peut effectivement s'attendre à ce que les mêmes rôles partagent globalement la même façon de jouer et ont donc des sensibilités similaires.
 
@@ -658,7 +663,7 @@ Nos attentes étaient donc fausses, c'est le rôle Tank qui a en moyenne une plu
 Le rôle Damage a carrément une plus petite sensibilité que le rôle Support.
 On ne sait pas vraiment comment l'expliquer, on ne pense simplement que le choix du rôle n'impact pas tant que ça la sensibilité. 
 
-## X) Est ce que les joueurs damage privilégient les souris plus légères contrairement aux autres rôles ?
+## 13) Est ce que les joueurs damage privilégient les souris plus légères contrairement aux autres rôles ?
 
 On peut s'attendre à ce que ce soit le cas pour les mêmes raisons que la moyenne des sensibilités mais peut-être que le poids de la souris n'est pas si determinant pour la façon de jouer.
 
@@ -677,7 +682,7 @@ On remarque une tendance pour tous les rôles autour des 80-90 et quelques excep
 Mais comme pour la question précédente, le rôle n'impact pas clairement le poids de la souris. Ces deux questions sont un peu "décalées" de la réalité car on pensait qu'il pouvait avoir une différence notable mais le gameplay entre Damage et les autres rôles ne doit pas tant différer que ça. 
 Peut-être que dans d'autres jeux les rôles Damage ou Duellist ont vraiment des sensibilités très différentes et des souris plus légères mais ce n'est pas le cas pour Overwatch.
 
-X) Y a t-il eu des grosses différences de pick rate au fil des saisons ?
+## 14) Y a t-il eu des grosses différences de pick rate au fil des saisons ?
 
 On peut imaginer que oui car selon les patchs de mise à jour certains héros sont améliorés ou désavantagé.
 
@@ -739,7 +744,7 @@ On a également cherché les nerfs de la saison 4 pour voir si Cassidy s'y trouv
 Pour Junker Queen la hausse est observée lors de la saison 4, en tapant sur internet "junker queen saison 4 buff" on comprend vite que c'est le cas. Des gros titres comme "Insane JunkerQueen Buffs" ou encore "JunkerQueen is GIGABUFFED" nous font comprendre que c'est effectivement le cas, la hausse de son pick rate vient d'une augmentation de ses capacités. On y retrouve une augmentation de la taille du chargeur ou encore un soin plus rapide. Ces améliorations font qu'elle est désignée comme le tank le plus fort et domine tout les matchs.
 
 
-X) Est-ce que le taux de victoire des héros varie beaucoup selon les ranks ?
+## 15) Est-ce que le taux de victoire des héros varie beaucoup selon les ranks ?
 
 On peut imaginer que oui car certains héros doivent nécessiter plus d'expérience pour être joué correctement.
 
@@ -798,7 +803,7 @@ Encore une fois on représente seulement les 5 héros avec l'évolution la plus 
 En général, on voit que les taux de victoire des héros augmentent à mesure que les rangs montent. Les joueurs de rangs plus élevés comprennent mieux comment utiliser les compétences des héros et ils sont plus coordonnés en équipe. Ils savent vraiment comment tirer le meilleur parti de leurs personnages, ce qui se traduit par de meilleurs résultats. Et quand les équipes jouent bien ensemble, ça fait une grosse différence dans le taux de victoire.
 De plus les joueurs de haut niveau s'entrainent rigoureusement et connaissent parfaitement leur héros ce qui augmente leur taux de victoire.
 
-## 4) Quelle est la moyenne des gains des joueurs en fonction de leur nationalité ?
+## 16) Quelle est la moyenne des gains des joueurs en fonction de leur nationalité ?
 
 Pour répondre à cette question, nous allons d'abord fusionner les données des joueurs avec les données des pays pour obtenir le nom complet des pays. Ensuite, nous allons agréger les gains des joueurs par nationalité et calculer la moyenne des gains pour chaque pays. Enfin, nous allons créer un graphique à barres horizontales pour visualiser les moyennes des gains par nationalité. Nous nous attendons à voir des disparités significatives dans les gains moyens des joueurs en fonction de leur nationalité. Les pays avec une industrie de l'e-sport plus développée ou des opportunités de tournois plus nombreuses pourraient avoir des gains moyens plus élevés. À l'inverse, les pays avec moins de soutien financier ou d'infrastructures pourraient avoir des gains moyens plus bas.
 ```{r}
@@ -991,3 +996,10 @@ ggplot(earnings_by_role_and_hero, aes(x = Hero, y = AverageEarnings, fill = Hero
 ```
 
 Observations : On peut observer que les gains moyens des joueurs d'Overwatch varient considérablement en fonction de leur nationalité. Les États-Unis, la Corée du Sud et la Chine sont les pays avec les gains moyens les plus élevés, tandis que les pays européens et sud-américains ont des gains moyens plus bas. Cela peut refléter les différences dans les infrastructures de l'e-sport, les opportunités de tournois et le soutien financier pour les joueurs professionnels dans ces Pays.
+
+## Application Shiny
+
+![](image/Screenshot_20240606_143040.png)
+
+
+![](image/Screenshot_20240606_143934.png)
