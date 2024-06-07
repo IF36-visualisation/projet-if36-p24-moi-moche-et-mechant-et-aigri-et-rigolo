@@ -278,7 +278,7 @@ ggplot(top_10_heroes, aes(x = reorder(Heroes, -DPS), y = DPS, fill = Bar_Color, 
         panel.border = element_blank(),
         panel.background = element_blank(),
         plot.background = element_blank()) +
-  scale_fill_manual(values = c("orange", "blue", "red"), 
+  scale_fill_manual(values = c("#83ffb0", "#ffbd6e", "#ff83a6"), 
                     name = "Role",
                     labels = c("Soins", "DPS", "Tank"))
 ```
@@ -467,7 +467,7 @@ top_10_heroes_life <- head(heroes2, 10)
 top_10_heroes_life <- top_10_heroes_life %>%
   mutate(Role = case_when(
     Heroes %in% c("Bastion Recon", "Bastion Turret", "Mei", "Reaper") ~ "DPS",
-    TRUE ~ "red"
+    TRUE ~ "#ffbd6e"
   ))
 
 ggplot(top_10_heroes_life, aes(x = reorder(Heroes, -Life), y = Life, fill = Role, label = Life)) +
@@ -484,8 +484,8 @@ ggplot(top_10_heroes_life, aes(x = reorder(Heroes, -Life), y = Life, fill = Role
         panel.border = element_blank(),
         panel.background = element_blank(),
         plot.background = element_blank()) +
-  scale_fill_manual(values = c("blue", "red"), 
-                    labels = c("DPS", "Tank"))
+  scale_fill_manual(values = c("#98eeff", "#ffbd6e"), 
+                    labels = c("Tank", "DPS"))
 
 ```
 On remarque que les tanks sont bien les personnages avec le plus de vie du jeu. Ils sont tous situés entre 400 et 600. La raison pour laquelle zarya n'ai que 400 points de vie, est qu'elle possède une capacité qui lui permet de se protéger de tous dégâts pendant quelques secondes. Après les tanks, viennent les dps qui possèdent le plus de points de vie.
@@ -505,7 +505,7 @@ heroes3 <- arrange(heroes3, desc(HPS))
 top_10_heroes_hps <- head(heroes3, 10)
 
 ggplot(top_10_heroes_hps, aes(x = reorder(Heroes, -HPS), y = HPS, label = HPS)) +
-  geom_bar(stat = "identity", fill = "green") +
+  geom_bar(stat = "identity", fill = "#83ffb0") +
   geom_text(position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
   labs(title = "Top héros avec le plus de soins par seconde",
   labs(title = "Top 10 héros avec le plus de Heal per seconds (Hors capacités)"),
@@ -996,7 +996,3 @@ ggplot(earnings_by_role_and_hero, aes(x = Hero, y = AverageEarnings, fill = Hero
 ```
 
 Observations : On peut observer que les gains moyens des joueurs d'Overwatch varient considérablement en fonction de leur nationalité. Les États-Unis, la Corée du Sud et la Chine sont les pays avec les gains moyens les plus élevés, tandis que les pays européens et sud-américains ont des gains moyens plus bas. Cela peut refléter les différences dans les infrastructures de l'e-sport, les opportunités de tournois et le soutien financier pour les joueurs professionnels dans ces Pays.
-
-## Application Shiny
-
-![](/home/juliette/Pictures/Screenshot_20240606_143040.png)
