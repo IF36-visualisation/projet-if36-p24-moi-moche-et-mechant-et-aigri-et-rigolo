@@ -13,32 +13,35 @@ datas4 <- read_csv("../data/ow2_season_04_FINAL_heroes_stats__2023-06-27.csv")
 generate_colors <- function(num_colors) {
   color_palette <- brewer.pal(num_colors, "Set3")
   color_gradient <- colorRampPalette(color_palette)
-  color_gradient(num_colors)
+  return(color_gradient(num_colors))
 }
 
 shinyServer(function(input, output) {
   
-  # Logique pour le rendu de la carte des gains des joueurs
+  # Logique pour le rendu de la carte des gains totaux des joueurs
   output$gameMap <- renderPlot({
     # Sélection des données selon le type de jeu choisi
-    sub_players <- if (input$gameType == "overwatch") {
-      players[players$Game == "Overwatch", ]
-    } else {
+    sub_players <- if (input$gameType == "all") {
       players
+    } else {
+      players[players$Game == input$gameType, ]
     }
     sub_players$CountryCode <- tolower(sub_players$CountryCode)
     
     country_codes$Country_Name <- sub(",.*", "", country_codes$Country_Name)
     country_codes$Two_Letter_Country_Code <- tolower(country_codes$Two_Letter_Country_Code)
     
+    # Fusion des données des joueurs et des pays
     merged_data <- merge(sub_players, country_codes, by.x = "CountryCode", by.y = "Two_Letter_Country_Code", all.x = TRUE)
-    average_earnings <- aggregate(TotalUSDPrize ~ Country_Name, data = merged_data, FUN = mean, na.rm = TRUE)
-    average_earnings <- average_earnings[order(-average_earnings$TotalUSDPrize),]
-    average_earnings$Country_Name <- tolower(average_earnings$Country_Name)
+    
+    # Calcul des gains totaux par pays
+    total_earnings <- aggregate(TotalUSDPrize ~ Country_Name, data = merged_data, FUN = sum, na.rm = TRUE)
+    total_earnings <- total_earnings[order(-total_earnings$TotalUSDPrize),]
+    total_earnings$Country_Name <- tolower(total_earnings$Country_Name)
     
     world_map <- map_data("world")
     world_map$region <- tolower(world_map$region)
-    map_data <- merge(world_map, average_earnings, by.x = "region", by.y = "Country_Name", all.x = TRUE)
+    map_data <- merge(world_map, total_earnings, by.x = "region", by.y = "Country_Name", all.x = TRUE)
     
     # Générer la carte
     ggplot(map_data, aes(x = long, y = lat, group = group, fill = TotalUSDPrize)) +
@@ -47,13 +50,12 @@ shinyServer(function(input, output) {
         low = "green", 
         high = "red", 
         na.value = "lightgrey", 
-        name = "Gains Moyens (USD)", 
+        name = "Gains Totaux (USD)", 
         limits = c(0, max(map_data$TotalUSDPrize, na.rm = TRUE))
       ) +
       coord_fixed(1.3) +
-      labs(title = if (input$gameType == "overwatch") 
-        "Moyenne des Gains par Nationalité des Joueurs d'Overwatch" 
-        else "Moyenne des Gains par Nationalité des Joueurs de Jeux Vidéo") +
+      labs(title = sprintf("Gains Totaux par Nationalité des Joueurs de %s", 
+                           ifelse(input$gameType == "all", "Tous les Jeux", input$gameType))) +
       theme_minimal()
   })
   
@@ -106,5 +108,4 @@ shinyServer(function(input, output) {
       scale_fill_manual(values = color_gradient) +
       theme_minimal()
   })
-  
 })

@@ -1,17 +1,6 @@
 library(shiny)
 library(shinydashboard)
-library(readr)
-library(dplyr)
-library(ggplot2)
-
-# Charger le dataset principal
-data <- read_csv("../data/ow2_quickplay_heroes_stats__2023-05-06.csv")
-
-# Charger les datasets des saisons
-datas1 <- read_csv("../data/ow2_season_01_FINAL_heroes_stats__2023-05-06.csv")
-datas2 <- read_csv("../data/ow2_season_02_FINAL_heroes_stats__2023-05-06.csv")
-datas3 <- read_csv("../data/ow2_season_03_FINAL_heroes_stats__2023-05-06.csv")
-datas4 <- read_csv("../data/ow2_season_04_FINAL_heroes_stats__2023-06-27.csv")
+library(ggplot2)  # Si nécessaire pour des éléments UI spécifiques
 
 # Interface utilisateur pour le dashboard
 ui <- dashboardPage(
@@ -38,7 +27,17 @@ ui <- dashboardPage(
       tabItem(tabName = "earnings",
               fluidRow(
                 selectInput("gameType", "Choisir le type de jeu:",
-                            choices = c("Tous les jeux" = "all", "Overwatch" = "overwatch")),
+                            choices = c("Tous les jeux" = "all",
+                                        "Overwatch" = "Overwatch",
+                                        "Counter-Strike: Global Offensive" = "Counter-Strike: Global Offensive",
+                                        "Dota 2" = "Dota 2",
+                                        "League of Legends" = "League of Legends",
+                                        "Fortnite" = "Fortnite",
+                                        "PUBG" = "PUBG",
+                                        "Hearthstone" = "Hearthstone",
+                                        "Starcraft II" = "Starcraft II",
+                                        "Heroes of the Storm" = "Heroes of the Storm",
+                                        "Arena of Valor" = "Arena of Valor")),
                 plotOutput("gameMap")
               )),
       # Onglet pour les dégâts en fonction des saisons
