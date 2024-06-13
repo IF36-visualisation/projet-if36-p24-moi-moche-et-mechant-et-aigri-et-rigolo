@@ -1005,5 +1005,8 @@ ggplot(earnings_by_role_and_hero, aes(x = Hero, y = AverageEarnings, fill = Hero
 
 ![](image/Screenshot_20240606_143040.png)
 
+Le premier graphique que nous avons modélisé sur l'application Shiny est celui de la question 1, sur les héros les plus joués. Nous l'avons rendu interactif en permettant à l'utilisateur de choisir le nombre de héros qu'il souhaite afficher, entre 1 et tous les héros (36). Cela permet à un utilisateur curieux d'aller voir au-delà des 10 héros initialement affichés dans la question 1. 
 
 ![](image/Screenshot_20240606_143934.png)
+
+Enfin, nous avons ajouté le graphique de la question 6, sur l'évolution des dégâts provoqués en fonction des saisons. Dans l'application shiny, l'utilisateur peut choisir les saisons qu'il souhaite afficher. Cela lui permet de choisir uniquement les saisons qui l'intéressent pour plus de lisibilité. 
