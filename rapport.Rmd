@@ -848,6 +848,9 @@ ggplot(map_data, aes(x = long, y = lat, group = group, fill = TotalUSDPrize/1000
   theme_minimal()
 
 ```
+Cette carte montre les gains totaux des joueurs d'Overwatch par nationalité. Les pays avec des gains plus élevés sont représentés en rouge, tandis que les pays avec des gains plus bas sont en vert. On peut voir des disparités significatives dans les gains des joueurs en fonction de leur nationalité. Les pays avec des gains plus élevés pourraient avoir une scène e-sport plus développée, des opportunités de tournois plus nombreuses ou un soutien financier plus important pour les joueurs. À l'inverse, les pays avec des gains plus bas pourraient manquer d'infrastructures ou de soutien pour les joueurs d'e-sport.
+
+Nous allons maintenant vérifier si cela reste vrai pour tous les jeux et pas seulement Overwatch.
 ```{r}
 # Standardisation des codes de pays dans le dataframe des joueurs
 players$CountryCode <- tolower(players$CountryCode)
@@ -886,6 +889,9 @@ ggplot(map_data, aes(x = long, y = lat, group = group, fill = TotalUSDPrize/1000
   theme_minimal()
 
 ```
+
+Cette carte confirme les disparités significatives dans les gains des joueurs en fonction de leur nationalité. Les pays avec des gains plus élevés sont représentés en rouge, tandis que les pays avec des gains plus bas sont en vert. Les différences de gains peuvent être attribuées à divers facteurs, notamment le niveau de compétition, le soutien financier, les opportunités de tournois et l'infrastructure de l'e-sport dans chaque pays. Les pays avec des gains plus élevés peuvent avoir des scènes e-sport plus développées, des équipes plus compétitives et des joueurs mieux rémunérés, tandis que les pays avec des gains plus bas peuvent manquer de ressources et de soutien pour les joueurs d'e-sport.
+
 
 ## 17)Quelles nationalités sont les plus communes parmi les 100 joueurs d'Overwatch les mieux payés?
 
@@ -1003,6 +1009,7 @@ ggplot(earnings_by_role_and_hero, aes(x = Hero, y = AverageEarnings, fill = Hero
   theme(axis.text.x = element_text(angle = 65, hjust = 1, size = 8))  # Combinaison des ajustements dans une seule instruction
 ```
 
+Le graphique en barres montre les gains moyens par héros et par rôle parmi les 100 meilleurs joueurs d'Overwatch. Les joueurs de chaque rôle ont des héros spécifiques qui semblent être plus rentables en termes de gains. Par exemple, les joueurs de rôle "Damage" semblent avoir des gains plus élevés avec des héros comme Tracer, Genji et Widowmaker, tandis que les joueurs de rôle "Support" ont des gains plus élevés avec des héros comme Mercy, Zenyatta et Ana. Les joueurs de rôle "Tank" semblent avoir des gains plus élevés avec des héros comme Reinhardt, Winston et D.Va. Ces tendances peuvent refléter la popularité, l'efficacité et la demande des héros dans le jeu, ainsi que l'impact de la performance individuelle sur les gains des joueurs.
 
 ## Application Shiny
 
@@ -1013,3 +1020,11 @@ Le premier graphique que nous avons modélisé sur l'application Shiny est celui
 ![](image/Screenshot_20240606_143934.png)
 
 Enfin, nous avons ajouté le graphique de la question 6, sur l'évolution des dégâts provoqués en fonction des saisons. Dans l'application shiny, l'utilisateur peut choisir les saisons qu'il souhaite afficher. Cela lui permet de choisir uniquement les saisons qui l'intéressent pour plus de lisibilité. 
+
+![](image/shiny_mathys1.png)
+
+La première carte permet de visualiser les gains totaux par nationalité des joueurs de jeux vidéo. L'utilisateur peut choisir entre les gains totaux de tous les joueurs de jeux vidéo ou uniquement des joueurs d'un certain jeu. Cela permet de comparer les gains des joueurs dun certain jeu avec ceux de tous les joueurs de jeux vidéo.
+
+![](image/shinymathys2.png)
+
+Cette image démontre les choix pour afficher les différents jeux
