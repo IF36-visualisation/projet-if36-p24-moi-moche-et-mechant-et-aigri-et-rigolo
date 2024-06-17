@@ -742,6 +742,9 @@ Pour Cassidy on remarque un pic à 8% lors de la saison 3. Après quelques reche
 On a également cherché les nerfs de la saison 4 pour voir si Cassidy s'y trouvait ce qui pourrait expliquer le retour en dessous de 4% de pick rate. Et on l'a effectivement trouvé, diminution des points de vie et réduction des dégâts de sa grenade ce qui désavantage grandement ce héro.
 
 Pour Junker Queen la hausse est observée lors de la saison 4, en tapant sur internet "junker queen saison 4 buff" on comprend vite que c'est le cas. Des gros titres comme "Insane JunkerQueen Buffs" ou encore "JunkerQueen is GIGABUFFED" nous font comprendre que c'est effectivement le cas, la hausse de son pick rate vient d'une augmentation de ses capacités. On y retrouve une augmentation de la taille du chargeur ou encore un soin plus rapide. Ces améliorations font qu'elle est désignée comme le tank le plus fort et domine tout les matchs.
+Voici un exemple de post reddit pour le buff de JunkerQueen pour la saison 4.
+
+![](image/over.png)
 
 
 ## 15) Est-ce que le taux de victoire des héros varie beaucoup selon les ranks ?
