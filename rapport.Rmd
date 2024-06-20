@@ -1040,3 +1040,25 @@ La première carte permet de visualiser les gains totaux par nationalité des jo
 
 Cette image démontre les choix pour afficher les différents jeux
 >>>>>>> e56cbe287173a602c7bfc0e893a3fc1189918831
+
+# Conclusion
+
+'Un résumé bref (une page grand maximum) comprenant ce que vous avez pu apprendre sur le jeu de données, les difficultés éventuelles et des pistes pour étendre ou élargir le travail effectué'
+
+Avis des membres du groupe : 
+
+Anne-lise : 
+Timo : 
+Juliette : Les deux principes que je retiendrai de ce cours sont que l'on peut tromper les gens avec la façon dont on représente les données, et le deuxième c'est qu'il faut prendre du recul sur les questions qu'on se pose car parfois il faut accepter que ça ne mène à aucun interprétation. Cela aurait pu être sympa de faire un cours sur python pour voir la différence avec R mais ce n'est pas la priorité dans l'UE. Et de faire un gouter pour votre anniversaire.
+Mathys : 
+# Annexe 
+
+Pour la partie proposition, chaque membre du groupe à travaillé sur son dataset comme nous en avions 4. Chacun à présenté son dataset et à émis des questions potentielles.
+
+Pour ce qui est de la partie exploration, certains ont pu travailler sur d'autre dataset que le leur mais chacun a fait 5 graphiques.
+Anne-Lise a fait les graphiques X,X,X,X et X
+Timo a fait les graphiques X,X,X,X et X
+Juliette a fait les graphiques 11,12,13,14 et 15
+et Mathys a fait les graphiques X,X,X,X et X
+
+Tout le monde a travaillé sur la présentation car chacun présentait ses graphiques.
