@@ -1045,18 +1045,23 @@ Cette image démontre les choix pour afficher les différents jeux
 
 'Un résumé bref (une page grand maximum) comprenant ce que vous avez pu apprendre sur le jeu de données, les difficultés éventuelles et des pistes pour étendre ou élargir le travail effectué'
 
+Je met des idées comme ça sans faire de phrases : 
+Apprentissage : Même si certaines questions ont des réponses attendues, nous en avons appris plus sur les héros les plus joués d'Overwatch et pourquoi, ainsi que les habitudes des joueurs professionnels et leur gains. Cela pourra nous permettre de faire des choix de héros plus réfléchi lors de nos futures parties. 
+Difficultés ; dataset de Timo vieux (pas tous les héros)
+Pistes pour élargir : utiliser plus les évolutions entre les niveaux de joueurs et les saisons pour saisir les subtilités du jeu. 
+
 Avis des membres du groupe : 
 
-Anne-lise : 
+Anne-lise : Cette UE m'a appris d'abord à découvrir R plus en profondeur, mais surtout à réfléchir à comment faire des graphiques clairs, efficaces, et non-biaisés. J'ai aimé que nous ne soyons pas évalués sur notre capacité à faire des graphiques avec un code très compliqué, mais sur le fait d'être capable de se poser des questions et de trouver la meilleure visualisation pour y répondre, même si celle-ci est un simple barchart.
 Timo : 
 Juliette : Les deux principes que je retiendrai de ce cours sont que l'on peut tromper les gens avec la façon dont on représente les données, et le deuxième c'est qu'il faut prendre du recul sur les questions qu'on se pose car parfois il faut accepter que ça ne mène à aucun interprétation. Cela aurait pu être sympa de faire un cours sur python pour voir la différence avec R mais ce n'est pas la priorité dans l'UE. Et de faire un gouter pour votre anniversaire.
 Mathys : 
 # Annexe 
 
-Pour la partie proposition, chaque membre du groupe à travaillé sur son dataset comme nous en avions 4. Chacun à présenté son dataset et à émis des questions potentielles.
+Pour la partie proposition, chaque membre du groupe a travaillé sur son dataset comme nous en avions 4. Chacun a présenté son dataset et à émis des questions potentielles.
 
 Pour ce qui est de la partie exploration, certains ont pu travailler sur d'autre dataset que le leur mais chacun a fait 5 graphiques.
-Anne-Lise a fait les graphiques X,X,X,X et X
+Anne-Lise a fait les graphiques 1,3,4,5 et 6 et a mis les graphiques 1 et 6 sur l'application Shiny
 Timo a fait les graphiques X,X,X,X et X
 Juliette a fait les graphiques 11,12,13,14 et 15
 et Mathys a fait les graphiques X,X,X,X et X
