@@ -1053,8 +1053,11 @@ Pistes pour élargir : utiliser plus les évolutions entre les niveaux de joueur
 Avis des membres du groupe : 
 
 Anne-lise : Cette UE m'a appris d'abord à découvrir R plus en profondeur, mais surtout à réfléchir à comment faire des graphiques clairs, efficaces, et non-biaisés. J'ai aimé que nous ne soyons pas évalués sur notre capacité à faire des graphiques avec un code très compliqué, mais sur le fait d'être capable de se poser des questions et de trouver la meilleure visualisation pour y répondre, même si celle-ci est un simple barchart.
-Timo : 
+
+Timo : Cette UE a été une très bonne découverte. J'y ai consolidé mes bases en visualisation de données et surtout appris un nouveau langage très intéressant. Je pense que toute personne qui veut travailler en data analyse se doit de choisir IF36, puisqu'elle aborde de nombreux sujets qui seront utiles en entreprises (et qui l'ont déjà été en entretiens pour ma part), comme faire le bon choix de graphique, pouvoir le réaliser et avoir des bases en Tableau. L'objectif dont vous aviez parlé au début du semestre, à savoir pouvoir intégrer une petite entreprise sereinement en tant que data analyst, est selon moi parfaitement respecté. Matière très intéressante, faut pas dire mais la seule pour laquelle je venais en amphi.
+
 Juliette : Les deux principes que je retiendrai de ce cours sont que l'on peut tromper les gens avec la façon dont on représente les données, et le deuxième c'est qu'il faut prendre du recul sur les questions qu'on se pose car parfois il faut accepter que ça ne mène à aucun interprétation. Cela aurait pu être sympa de faire un cours sur python pour voir la différence avec R mais ce n'est pas la priorité dans l'UE. Et de faire un gouter pour votre anniversaire.
+
 Mathys : J'ai appris à coder en R et à faire des graphiques. J'ai appris à poser des questions et à y répondre avec des graphiques. J'ai appris qu'il est facile de tromper les gens avec des graphiques. Comme Juliette, je penses qu'un gouter pour votre anniversaire serait une bonne idée.
 # Annexe 
 
