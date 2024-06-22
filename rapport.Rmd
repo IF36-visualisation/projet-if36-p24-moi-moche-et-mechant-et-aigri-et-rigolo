@@ -1050,6 +1050,20 @@ Apprentissage : Même si certaines questions ont des réponses attendues, nous e
 Difficultés ; dataset de Timo vieux (pas tous les héros)
 Pistes pour élargir : utiliser plus les évolutions entre les niveaux de joueurs et les saisons pour saisir les subtilités du jeu. 
 
+Au cours de ce projet, nous avons exploré des données de tout types relatives à Overwatch, allant des statistiques théoriques et en jeux des héros, en passant par les paramètres des joueurs professionnels, jusqu'aux différents gains des différentes équipes ou joueurs eSport.
+
+Sur la vingtaine de graphiques retenus, nous avons notamment analysé quels sont les héros les plus populaires, ceux qui sont les plus efficaces, les différentes manières de jouer des joueurs professionnels et comment sont répartis les gains selon les différents acteurs de ce jeu dans le monde entier. Bien que pour plusieurs questions nous pouvions nous attendre aux résultats, nous avons rencontré des surprises que seule l'analyse de données pouvait pointer. En effet, que ce soit concernant les héros les plus impactants en termes de dégâts, l'évolution des personnages les plus joués selon les saisons (Cassidy, on te voit), ou l'écrasante majorité de Coréens parmi les joueurs les mieux payés au monde (~70% de Coréens, wtf ils sont trop forts), ces différents graphiques ont pointé certains éléments dont on ne se serait jamais douté, d'où l'intérêt de ce projet.
+
+Nous avons toutefois rencontré certaines difficultés, comme le jeu de données contenant les statistiques théoriques des héros. Ce dernier était daté et loin de contenir tous les héros actuels; il ne prenait d'ailleurs pas en compte les changements des nombreuses mises à jour des dernières années. Il a été notamment compliqué de joindre deux jeux de données dont ce dernier, puisque ce problème nous a obligés à faire un vrai travail de filtrage pour ne joindre que les héros présents dans les deux datasets. Il fut aussi assez difficile de traiter le jeu de données des statistiques en jeu, bien que très fourni et intéressant, nous n'avons pas utilisé un grand nombre de colonnes (131), ce qui impliquait, une nouvelle fois, beaucoup de filtrage. Enfin, certains graphiques, assez complexes, ainsi que quelques apps Shiny, ont pu nous donner du fil à retordre, mais après réflexion, les solutions ont été trouvées et nous ont permis d'améliorer nos compétences.
+
+En guise d'ouverture, nous avons plusieurs pistes:
+
+  - Étudier plus en profondeur les différences de gains, la répartition des joueurs pro et celle des équipes, en les mettant clairement en comparaison avec d'autres jeux     vidéo : quel est le jeu avec la scène eSport la plus active, celui qui offre à ses joueurs les plus grosses rémunérations, etc.
+
+  - Étudier l'évolution des performances et des préférences des héros sur une échelle temporelle plus fine pour détecter des tendances et des impacts des mises à jour du jeu (un peu comme le graphique 14, avec le pickrate pour chaque saison, mais faire un vrai travail de fond).
+
+  - Analyser plus en détail les stratégies d'équipe et leur impact sur les résultats des matchs, en faisant des graphiques non pas sur des héros uniques, mais sur des compositions entières d'équipes pour rechercher quelle est la meilleure composition d'un point de vue statistique selon les modes de jeu, par exemple.
+
 Avis des membres du groupe : 
 
 Anne-lise : Cette UE m'a appris d'abord à découvrir R plus en profondeur, mais surtout à réfléchir à comment faire des graphiques clairs, efficaces, et non-biaisés. J'ai aimé que nous ne soyons pas évalués sur notre capacité à faire des graphiques avec un code très compliqué, mais sur le fait d'être capable de se poser des questions et de trouver la meilleure visualisation pour y répondre, même si celle-ci est un simple barchart.
