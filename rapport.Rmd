@@ -1010,14 +1010,9 @@ ggplot(earnings_by_role_and_hero, aes(x = Hero, y = AverageEarnings, fill = Hero
   theme(axis.text.x = element_text(angle = 65, hjust = 1, size = 8))  # Combinaison des ajustements dans une seule instruction
 ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 Observations : On peut observer que les gains moyens des joueurs d'Overwatch varient considérablement en fonction de leur nationalité. Les États-Unis, la Corée du Sud et la Chine sont les pays avec les gains moyens les plus élevés, tandis que les pays européens et sud-américains ont des gains moyens plus bas. Cela peut refléter les différences dans les infrastructures de l'e-sport, les opportunités de tournois et le soutien financier pour les joueurs professionnels dans ces Pays.
-=======
-Observations : On peut observer que les gains moyens des joueurs d'Overwatch varient considérablement en fonction de leur nationalité. Les États-Unis, la Corée du Sud et la Chine sont les pays avec les gains moyens les plus élevés, tandis que les pays européens et sud-américains ont des gains moyens plus bas. Cela peut refléter les différences dans les infrastructures de l'e-sport, les opportunités de tournois et le soutien financier pour les joueurs professionnels dans ces Pays.
-=======
+
 Le graphique en barres montre les gains moyens par héros et par rôle parmi les 100 meilleurs joueurs d'Overwatch. Les joueurs de chaque rôle ont des héros spécifiques qui semblent être plus rentables en termes de gains. Par exemple, les joueurs de rôle "Damage" semblent avoir des gains plus élevés avec des héros comme Tracer, Genji et Widowmaker, tandis que les joueurs de rôle "Support" ont des gains plus élevés avec des héros comme Mercy, Zenyatta et Ana. Les joueurs de rôle "Tank" semblent avoir des gains plus élevés avec des héros comme Reinhardt, Winston et D.Va. Ces tendances peuvent refléter la popularité, l'efficacité et la demande des héros dans le jeu, ainsi que l'impact de la performance individuelle sur les gains des joueurs.
->>>>>>> e56cbe287173a602c7bfc0e893a3fc1189918831
 
 ## Application Shiny
 
@@ -1026,9 +1021,6 @@ Le graphique en barres montre les gains moyens par héros et par rôle parmi les
 Le premier graphique que nous avons modélisé sur l'application Shiny est celui de la question 1, sur les héros les plus joués. Nous l'avons rendu interactif en permettant à l'utilisateur de choisir le nombre de héros qu'il souhaite afficher, entre 1 et tous les héros (36). Cela permet à un utilisateur curieux d'aller voir au-delà des 10 héros initialement affichés dans la question 1. 
 
 ![](image/Screenshot_20240606_143934.png)
-<<<<<<< HEAD
->>>>>>> 8ad3137327356e67bc3697def68c68a1bc7b8463
-=======
 
 Enfin, nous avons ajouté le graphique de la question 6, sur l'évolution des dégâts provoqués en fonction des saisons. Dans l'application shiny, l'utilisateur peut choisir les saisons qu'il souhaite afficher. Cela lui permet de choisir uniquement les saisons qui l'intéressent pour plus de lisibilité. 
 
@@ -1039,22 +1031,14 @@ La première carte permet de visualiser les gains totaux par nationalité des jo
 ![](image/shinymathys2.png)
 
 Cette image démontre les choix pour afficher les différents jeux
->>>>>>> e56cbe287173a602c7bfc0e893a3fc1189918831
 
 # Conclusion
 
-'Un résumé bref (une page grand maximum) comprenant ce que vous avez pu apprendre sur le jeu de données, les difficultés éventuelles et des pistes pour étendre ou élargir le travail effectué'
-
-Je met des idées comme ça sans faire de phrases : 
-Apprentissage : Même si certaines questions ont des réponses attendues, nous en avons appris plus sur les héros les plus joués d'Overwatch et pourquoi, ainsi que les habitudes des joueurs professionnels et leur gains. Cela pourra nous permettre de faire des choix de héros plus réfléchi lors de nos futures parties. 
-Difficultés ; dataset de Timo vieux (pas tous les héros)
-Pistes pour élargir : utiliser plus les évolutions entre les niveaux de joueurs et les saisons pour saisir les subtilités du jeu. 
-
 Au cours de ce projet, nous avons exploré des données de tout types relatives à Overwatch, allant des statistiques théoriques et en jeux des héros, en passant par les paramètres des joueurs professionnels, jusqu'aux différents gains des différentes équipes ou joueurs eSport.
 
-Sur la vingtaine de graphiques retenus, nous avons notamment analysé quels sont les héros les plus populaires, ceux qui sont les plus efficaces, les différentes manières de jouer des joueurs professionnels et comment sont répartis les gains selon les différents acteurs de ce jeu dans le monde entier. Bien que pour plusieurs questions nous pouvions nous attendre aux résultats, nous avons rencontré des surprises que seule l'analyse de données pouvait pointer. En effet, que ce soit concernant les héros les plus impactants en termes de dégâts, l'évolution des personnages les plus joués selon les saisons (Cassidy, on te voit), ou l'écrasante majorité de Coréens parmi les joueurs les mieux payés au monde (~70% de Coréens, wtf ils sont trop forts), ces différents graphiques ont pointé certains éléments dont on ne se serait jamais douté, d'où l'intérêt de ce projet.
+Sur la vingtaine de graphiques retenus, nous avons notamment analysé quels sont les héros les plus populaires, ceux qui sont les plus efficaces, les différentes manières de jouer des joueurs professionnels et comment sont répartis les gains selon les différents acteurs de ce jeu dans le monde entier. Bien que pour plusieurs questions, nous pouvions nous attendre aux résultats, nous avons rencontré des surprises que seule l'analyse de données pouvait pointer. En effet, que ce soit concernant les héros les plus impactants en termes de dégâts, l'évolution des personnages les plus joués selon les saisons (Cassidy, on te voit), ou l'écrasante majorité de Coréens parmi les joueurs les mieux payés au monde (~70% de Coréens, wtf ils sont trop forts), ces différents graphiques ont pointé certains éléments dont on ne se serait jamais douté, d'où l'intérêt de ce projet.
 
-Nous avons toutefois rencontré certaines difficultés, comme le jeu de données contenant les statistiques théoriques des héros. Ce dernier était daté et loin de contenir tous les héros actuels; il ne prenait d'ailleurs pas en compte les changements des nombreuses mises à jour des dernières années. Il a été notamment compliqué de joindre deux jeux de données dont ce dernier, puisque ce problème nous a obligés à faire un vrai travail de filtrage pour ne joindre que les héros présents dans les deux datasets. Il fut aussi assez difficile de traiter le jeu de données des statistiques en jeu, bien que très fourni et intéressant, nous n'avons pas utilisé un grand nombre de colonnes (131), ce qui impliquait, une nouvelle fois, beaucoup de filtrage. Enfin, certains graphiques, assez complexes, ainsi que quelques apps Shiny, ont pu nous donner du fil à retordre, mais après réflexion, les solutions ont été trouvées et nous ont permis d'améliorer nos compétences.
+Nous avons toutefois rencontré certaines difficultés, comme le jeu de données contenant les statistiques théoriques des héros. Ce dernier était daté et loin de contenir tous les héros actuels; il ne prenait d'ailleurs pas en compte les changements des nombreuses mises à jour des dernières années. Il a été notamment compliqué de joindre deux jeux de données dont ce dernier, puisque ce problème nous a obligés à faire un vrai travail de filtrage pour ne joindre que les héros présents dans les deux datasets. Il fut aussi assez difficile de traiter le jeu de données des statistiques en jeu, bien que très fourni et intéressant, nous n'avons pas utilisé un grand nombre de colonnes (131 colonnes dans le dataset à l'origine), ce qui impliquait, une nouvelle fois, beaucoup de filtrage. Enfin, certains graphiques, assez complexes, ainsi que quelques apps Shiny, ont pu nous donner du fil à retordre, mais après réflexion, les solutions ont été trouvées et nous ont permis d'améliorer nos compétences.
 
 En guise d'ouverture, nous avons plusieurs pistes:
 
@@ -1063,8 +1047,9 @@ En guise d'ouverture, nous avons plusieurs pistes:
   - Étudier l'évolution des performances et des préférences des héros sur une échelle temporelle plus fine pour détecter des tendances et des impacts des mises à jour du jeu (un peu comme le graphique 14, avec le pickrate pour chaque saison, mais faire un vrai travail de fond).
 
   - Analyser plus en détail les stratégies d'équipe et leur impact sur les résultats des matchs, en faisant des graphiques non pas sur des héros uniques, mais sur des compositions entières d'équipes pour rechercher quelle est la meilleure composition d'un point de vue statistique selon les modes de jeu, par exemple.
+  
 
-Avis des membres du groupe : 
+## Avis des membres du groupe : 
 
 Anne-lise : Cette UE m'a appris d'abord à découvrir R plus en profondeur, mais surtout à réfléchir à comment faire des graphiques clairs, efficaces, et non-biaisés. J'ai aimé que nous ne soyons pas évalués sur notre capacité à faire des graphiques avec un code très compliqué, mais sur le fait d'être capable de se poser des questions et de trouver la meilleure visualisation pour y répondre, même si celle-ci est un simple barchart.
 
